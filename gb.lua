@@ -1,3 +1,7 @@
+
+-- Stanford GraphBase ffi bounding
+-- Written by Soojin Nam. Public Domain.
+
 local ffi = require "ffi"
 local C = ffi.C
 local NULL = ffi.null
