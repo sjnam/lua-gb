@@ -1,7 +1,5 @@
-Stanford GraphBase ffi binding
-==============================
 Stanford GraphBase: A Platform for Combinatorial Computing
-----------------------------------------------------------
+==========================================================
 by Donald E. Knuth, Stanford University
 
 A highly portable collection of programs and data is now
