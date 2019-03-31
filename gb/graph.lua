@@ -48,6 +48,29 @@ Area data;
 Area aux_data;
 util uu,vv,ww,xx,yy,zz;
 }Graph;
+
+extern long verbose;
+extern long panic_code;
+extern long gb_trouble_code;
+
+extern char*gb_alloc(long, Area);
+extern long extra_n;
+
+extern char null_string[];
+extern void make_compound_id(Graph*,char*,Graph*,char*);
+extern void make_double_compound_id(Graph*,char*,Graph*,char*,Graph*,char*);
+
+extern Graph*gb_new_graph(long);
+extern void gb_new_arc(Vertex*,Vertex*,long);
+extern Arc*gb_virgin_arc();
+extern void gb_new_edge(Vertex*,Vertex*,long);
+extern char*gb_save_string(char*);
+extern void switch_to_graph(Graph*);
+extern void gb_recycle(Graph*);
+extern void hash_in(Vertex*);
+extern Vertex*hash_out(char*);
+extern void hash_setup(Graph*);
+extern Vertex*hash_lookup(char*,Graph*);
 ]]
 
 
@@ -118,6 +141,75 @@ end
 _M.arc = arc
 _M.vertex = vertex
 _M.graph = graph
+_M.gb_alloc = gb.gb_alloc
+
+
+function _M.make_compound_id (g, s1, gg, s2)
+    gb.make_compound_id(g._g, ffi_cast("char*", s1),
+                        gg._g, ffi_cast("char*", s2))
+end
+
+
+function _M.make_double_compound_id (g, s1, g, s2, ggg, s3)
+    gb.make_double_compound_id(g._g, ffi_cast("char*", s1),
+                               gg._g, ffi_cast("char*", s2),
+                               ggg._g, ffi_cast("char*", s3))
+end
+
+
+function _M.gb_new_graph (n)
+    return graph(gb.gb_new_graph(n))
+end
+
+
+function _M.gb_new_arc (u, v, len)
+    gb.gb_new_arc(u._v, v._v, len)
+end
+
+
+function _M.gb_virgin_arc ()
+    return arc(gb.gb_virgin_arc())
+end
+
+
+function _M.gb_new_arc (u, v, len)
+    gb.gb_new_arc(u._v, v._v, len)
+end
+
+
+function _M.gb_save_string (s)
+    return ffi_string(gb.gb_save_string(ffi_cast("char*", s)))
+end
+
+
+function _M.switch_to_graph (g)
+    gb.switch_to_graph(g._g)
+end
+
+
+function _M.gb_recycle (g)
+    gb.gb_recycle(g._g)
+end
+
+
+function _M.hash_in (v)
+    gb.hash_in(v._v)
+end
+
+
+function _M.hash_out (s)
+    return vertex(gb.hash_out(ffi_cast("char*", s)))
+end
+
+
+function _M.hash_setup (g)
+    gb.hash_setup(g._g)
+end
+
+
+function _M.hash_lookup (s, g)
+    return vertex(gb.hash_lookup(ffi_cast("char*", s), g._g))
+end
 
 
 return _M

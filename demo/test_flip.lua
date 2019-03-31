@@ -1,8 +1,8 @@
-local gb = require "gb"
+local gb_flip = require "gb.flip"
 local error = error
-local gb_init_rand = gb.gb_init_rand
-local gb_next_rand = gb.gb_next_rand
-local gb_unif_rand = gb.gb_unif_rand
+local gb_init_rand = gb_flip.gb_init_rand
+local gb_next_rand = gb_flip.gb_next_rand
+local gb_unif_rand = gb_flip.gb_unif_rand
 
 
 gb_init_rand(-314159)
