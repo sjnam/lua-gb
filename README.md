@@ -6,6 +6,10 @@ A highly portable collection of programs and data is now
 available to researchers who study combinatorial algorithms and data
 structures.
 
+Status
+======
+This library is still experimental and under early development.
+
 Installation
 ============
 To install lua-gb you need to install [libgb](https://www-cs-faculty.stanford.edu/~knuth/sgb.html) with **shared libraries** firtst. Then you can install it by placing `gb/*.lua` to your lua library path.
