@@ -8,6 +8,7 @@ structures.
 
 Installation
 ============
+To install lua-gb you need to install [libgb](ftp://ftp.cs.stanford.edu/pub/sgb/sgb.tar.gz) with shared libraries firtst. Then you can install it by placing `gb/*.lua` to your lua library path.
 
 Samples
 =======
