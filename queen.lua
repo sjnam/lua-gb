@@ -1,4 +1,7 @@
 local gb = require "gb"
+local board = gb.board
+local gunion = gb.gunion
+local save_graph = gb.save_graph
 
 
 local function printf (...)
@@ -6,14 +9,14 @@ local function printf (...)
 end
 
 
-local g = gb.board(3, 4, 0, 0, -1, 0, 0)
-local gg = gb.board(3, 4, 0, 0, -2, 0, 0)
-local ggg = gb.gunion(g, gg, 0, 0)
+local g = board(3, 4, 0, 0, -1, 0, 0)
+local gg = board(3, 4, 0, 0, -2, 0, 0)
+local ggg = gunion(g, gg, 0, 0)
 
-gb.save_graph(ggg, "queen.gb")
+save_graph(ggg, "queen.gb")
 
 print("Queen Moves on a 3x4 Board\n")
-print("  The graph whose official name is\n"..ggg.id)
+printf("  The graph whose official name is\n%s\n", ggg.id)
 printf("  has %d vertices and %d arcs:\n\n", ggg.n, ggg.m)
 
 for _, v in ipairs(ggg.vertices) do
