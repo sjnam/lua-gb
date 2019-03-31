@@ -6,6 +6,7 @@ local ffi = require "ffi"
 local NULL = ffi.null
 local tonumber = tonumber
 local ffi_load = ffi.load
+local ffi_cast = ffi.cast
 local ffi_string = ffi.string
 
 
@@ -52,14 +53,12 @@ util uu,vv,ww,xx,yy,zz;
 extern long verbose;
 extern long panic_code;
 extern long gb_trouble_code;
-
 extern char*gb_alloc(long, Area);
+extern void gb_free(Area);
 extern long extra_n;
-
 extern char null_string[];
 extern void make_compound_id(Graph*,char*,Graph*,char*);
 extern void make_double_compound_id(Graph*,char*,Graph*,char*,Graph*,char*);
-
 extern Graph*gb_new_graph(long);
 extern void gb_new_arc(Vertex*,Vertex*,long);
 extern Arc*gb_virgin_arc();
@@ -141,7 +140,9 @@ end
 _M.arc = arc
 _M.vertex = vertex
 _M.graph = graph
+
 _M.gb_alloc = gb.gb_alloc
+_M.gb_free = gb.gb_free
 
 
 function _M.make_compound_id (g, s1, gg, s2)

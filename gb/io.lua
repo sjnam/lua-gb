@@ -43,7 +43,7 @@ _M.gb_newline = gb.gb_newline
 _M.gb_backup = gb.gb_backup
 _M.gb_digit = gb.gb_digit
 _M.gb_number = gb.gb_number
---_M.gb_raw_close = gb.gb_raw_close
+_M.gb_raw_close = gb.gb_raw_close
 
 
 function _M.gb_char ()
