@@ -1,4 +1,4 @@
-Stanford GraphBase: A Platform for Combinatorial Computing
+Stanford GraphBase
 ==========================================================
 by Donald E. Knuth, Stanford University
 
