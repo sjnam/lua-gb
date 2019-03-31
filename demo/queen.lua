@@ -1,7 +1,8 @@
-local gb = require "gb"
-local board = gb.board
-local gunion = gb.gunion
-local save_graph = gb.save_graph
+local gb_save = require "gb.save"
+local gb_basic = require "gb.basic"
+local board = gb_basic.board
+local gunion = gb_basic.gunion
+local save_graph = gb_save.save_graph
 
 
 local function printf (...)

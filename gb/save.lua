@@ -2,6 +2,7 @@
 -- Stanford GraphBase ffi bounding
 -- Written by Soojin Nam. Public Domain.
 
+require "gb.graph"
 local ffi = require "ffi"
 local ffi_cast = ffi.cast
 local ffi_load = ffi.load

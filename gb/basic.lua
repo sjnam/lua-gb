@@ -3,10 +3,10 @@
 -- Written by Soojin Nam. Public Domain.
 
 
+local gb_graph = require "gb.graph"
 local ffi = require "ffi"
 local ffi_cast = ffi.cast
 local ffi_load = ffi.load
-local gb_graph = require "gb.graph"
 local graph = gb_graph.graph
 
 

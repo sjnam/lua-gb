@@ -32,11 +32,7 @@ end
 
 
 _M.gb_flip_cycle = gb.gb_flip_cycle
-
-
 _M.gb_init_rand = gb.gb_init_rand
-
-
 _M.gb_unif_rand = gb.gb_unif_rand
 
 
