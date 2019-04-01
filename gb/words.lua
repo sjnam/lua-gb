@@ -12,7 +12,7 @@ local vertex = gb_graph.vertex
 
 ffi.cdef[[
 extern Graph*words(unsigned long,long[],long,long);
-extern Vertex*find_word(char*,void[](*)());
+extern Vertex*find_word(char*,void(*)());
 ]]
 
 
