@@ -77,68 +77,29 @@ local gb = ffi_load "gb"
 
 
 local _M = {
-    version = '0.0.1'
+   version = '0.0.1'
 }
 
 
-local arc, vertex, graph
-
-
-arc = function (cdata)
-    if cdata == NULL then
-        return NULL
-    end
-    return {
-        _a = cdata,
-        tip = vertex(cdata.tip, true),
-        len = tonumber(cdata.len)
-    }
+local graph = function (cdata)
+   if cdata == NULL then
+      return NULL
+   end
+   local g = {
+      _g = cdata,
+      n = tonumber(cdata.n),
+      m = tonumber(cdata.m),
+      id = ffi_string(cdata.id)
+   }
+   local vertices = {}
+   for i=0,g.n-1 do
+      vertices[#vertices+1] = cdata.vertices[i]
+   end
+   g.vertices = vertices
+   return g
 end
 
 
-vertex = function (cdata, tip)
-    if cdata == NULL then
-        return NULL
-    end
-    local v = {
-        _v = cdata,
-        name = ffi_string(cdata.name)
-    }
-    if tip then
-        return v
-    end
-    local arcs = {}
-    local a = cdata.arcs
-    while a ~= NULL do
-        arcs[#arcs+1] = arc(a)
-        a = a.next
-    end
-    v.arcs = arcs
-    return v
-end
-
-
-graph = function (cdata)
-    if cdata == NULL then
-        return NULL
-    end
-    local g = {
-        _g = cdata,
-        n = tonumber(cdata.n),
-        m = tonumber(cdata.m),
-        id = ffi_string(cdata.id)
-    }
-    local vertices = {}
-    for i=0,g.n-1 do
-        vertices[#vertices+1] = vertex(cdata.vertices[i])
-    end
-    g.vertices = vertices
-    return g
-end
-
-
-_M.arc = arc
-_M.vertex = vertex
 _M.graph = graph
 
 _M.gb_alloc = gb.gb_alloc
@@ -146,70 +107,70 @@ _M.gb_free = gb.gb_free
 
 
 function _M.make_compound_id (g, s1, gg, s2)
-    gb.make_compound_id(g._g, ffi_cast("char*", s1),
-                        gg._g, ffi_cast("char*", s2))
+   gb.make_compound_id(g._g, ffi_cast("char*", s1),
+                       gg._g, ffi_cast("char*", s2))
 end
 
 
 function _M.make_double_compound_id (g, s1, g, s2, ggg, s3)
-    gb.make_double_compound_id(g._g, ffi_cast("char*", s1),
-                               gg._g, ffi_cast("char*", s2),
-                               ggg._g, ffi_cast("char*", s3))
+   gb.make_double_compound_id(g._g, ffi_cast("char*", s1),
+                              gg._g, ffi_cast("char*", s2),
+                              ggg._g, ffi_cast("char*", s3))
 end
 
 
 function _M.gb_new_graph (n)
-    return graph(gb.gb_new_graph(n))
+   return graph(gb.gb_new_graph(n))
 end
 
 
 function _M.gb_new_arc (u, v, len)
-    gb.gb_new_arc(u._v, v._v, len)
+   gb.gb_new_arc(u._v, v._v, len)
 end
 
 
 function _M.gb_virgin_arc ()
-    return arc(gb.gb_virgin_arc())
+   return arc(gb.gb_virgin_arc())
 end
 
 
 function _M.gb_new_arc (u, v, len)
-    gb.gb_new_arc(u._v, v._v, len)
+   gb.gb_new_arc(u._v, v._v, len)
 end
 
 
 function _M.gb_save_string (s)
-    return ffi_string(gb.gb_save_string(ffi_cast("char*", s)))
+   return ffi_string(gb.gb_save_string(ffi_cast("char*", s)))
 end
 
 
 function _M.switch_to_graph (g)
-    gb.switch_to_graph(g._g)
+   gb.switch_to_graph(g._g)
 end
 
 
 function _M.gb_recycle (g)
-    gb.gb_recycle(g._g)
+   gb.gb_recycle(g._g)
 end
 
 
 function _M.hash_in (v)
-    gb.hash_in(v._v)
+   gb.hash_in(v._v)
 end
 
 
 function _M.hash_out (s)
-    return vertex(gb.hash_out(ffi_cast("char*", s)))
+   return gb.hash_out(ffi_cast("char*", s))
 end
 
 
 function _M.hash_setup (g)
-    gb.hash_setup(g._g)
+   gb.hash_setup(g._g)
 end
 
 
 function _M.hash_lookup (s, g)
-    return vertex(gb.hash_lookup(ffi_cast("char*", s), g._g))
+   return gb.hash_lookup(ffi_cast("char*", s), g._g)
 end
 
 

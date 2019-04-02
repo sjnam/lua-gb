@@ -5,7 +5,6 @@
 local gb_graph = require "gb.graph"
 local ffi = require "ffi"
 local ffi_load = ffi.load
-local vertex = gb_graph.vertex
 
 
 ffi.cdef[[
@@ -56,12 +55,12 @@ end
 
 
 function _M.del_first ()
-   return vertex(gb.del_first())
+   return gb.del_first()
 end
 
 
 function _M.del_128 ()
-   return vertex(gb.del_128())
+   return gb.del_128()
 end
 
 
