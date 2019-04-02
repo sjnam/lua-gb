@@ -2,13 +2,17 @@ local ffi = require "ffi"
 local gb_graph = require "gb.graph"
 local gb_words = require "gb.words"
 local NULL = ffi.null
+local print = print
+local ipairs = ipairs
 local tonumber = tonumber
+local sformat = string.format
+local io_write = io.write
 local str = ffi.string
 local words = gb_words.words
 
 
 local function printf (...)
-   io.write(string.format(...))
+   io_write(sformat(...))
 end
 
 
@@ -35,24 +39,21 @@ end
 local g = words(0, NULL, 0, 0)
 local n, isol, comp, m = 0, 0, 0, 0
 
-printf("Component analysis of %s\n", g.id)
-
+print("Component analysis of "..g.id)
 for _, v in ipairs(g.vertices) do
    n = n + 1
    printf("%4d: %5d %s", n, tonumber(v.u.I), str(v.name))
-
    v.z.V = v
    v.y.V = v
    v.x.I = 1
    isol = isol + 1
    comp = comp + 1
-
    local a = v.arcs
    while a ~= NULL and a.tip > v do
       a = a.next
    end
    if a == NULL then
-      printf("[1]")
+      io_write("[1]")
    else
       local c = 0
       while a ~= NULL do
@@ -64,7 +65,7 @@ for _, v in ipairs(g.vertices) do
             if size(u) < size(w) then
                if c > 0 then
                   c = c + 1
-                  printf("%s %s[%d]",(c==2 and " with" or ","),
+                  printf("%s %s[%d]", (c==2 and " with" or ","),
                          str(u.name), tonumber(size(u)))
                else
                   c = c + 1
@@ -80,7 +81,7 @@ for _, v in ipairs(g.vertices) do
             else
                if c > 0 then
                   c = c + 1
-                  printf("%s %s[%d]",(c==2 and " with" or ","),
+                  printf("%s %s[%d]", (c==2 and " with" or ","),
                          str(w.name), tonumber(size(w)))
                else
                   c = c + 1
@@ -110,7 +111,7 @@ end
 print("\nThe following non-isolated words didn't join the giant component:")
 for _, v in ipairs(g.vertices) do
    if master(v) == v and size(v) > 1 and size(v) + size(v) < g.n then
-      printf("%s", str(v.name))
+      io_write(str(v.name))
       local c = 1
       local u = link(v)
       while u ~= v do
@@ -120,7 +121,7 @@ for _, v in ipairs(g.vertices) do
          else
             c = c + 1
          end
-         printf(" %s", str(u.name))
+         io_write(" "..str(u.name))
          u = link(u)
       end
       print()
