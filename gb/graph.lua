@@ -93,7 +93,7 @@ local graph = function (cdata)
    }
    local vertices = {}
    for i=0,g.n-1 do
-      vertices[#vertices+1] = cdata.vertices[i]
+      vertices[#vertices+1] = cdata.vertices + i
    end
    g.vertices = vertices
    return g

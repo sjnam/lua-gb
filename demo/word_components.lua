@@ -48,7 +48,7 @@ for _, v in ipairs(g.vertices) do
    comp = comp + 1
 
    local a = v.arcs
-   while a ~= NULL and a.tip > ffi.cast("struct vertex_struct*", v) do
+   while a ~= NULL and a.tip > v do
       a = a.next
    end
    if a == NULL then
