@@ -17,6 +17,7 @@ local gb = ffi.load "gb"
 
 
 local _M = {
+   INFTY = 0x10000000,
    plane = gb.plane,
    plane_miles = gb.plane_miles,
    delaunay = gb.delaunay

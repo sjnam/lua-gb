@@ -17,7 +17,35 @@ extern char*chap_name[];
 local gb = ffi.load "gb"
 
 
-return {
+local _M = {
    book = gb.book,
    bi_book = gb.bi_book
 }
+
+
+function _M.desc (v)
+    return ffi.string(v.z.S)
+end
+
+
+function _M.in_count (v)
+    return tonumber(v.y.I)
+end
+
+
+function _M.out_count (v)
+    return tonumber(v.x.I)
+end
+
+
+function _M.short_code (v)
+    return tonumber(v.u.I)
+end
+
+
+function _M.chap_no (a)
+    return tonumber(a.a.I)
+end
+
+
+return _M
