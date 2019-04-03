@@ -2,10 +2,8 @@
 -- Stanford GraphBase ffi bounding
 -- Written by Soojin Nam. Public Domain.
 
-local gb_graph = require "gb.graph"
+require "gb.graph"
 local ffi = require "ffi"
-local ffi_load = ffi.load
-local graph = gb_graph.graph
 
 
 ffi.cdef[[
@@ -16,20 +14,10 @@ extern char*chap_name[];
 ]]
 
 
-local gb = ffi_load "gb"
+local gb = ffi.load "gb"
 
 
-local _M = {}
-
-
-function _M.book (...)
-    return graph(gb.book(...))
-end
-
-
-function _M.bi_book (...)
-    return graph(gb.bi_book(...))
-end
-
-
-return _M
+return {
+   book = gb.book,
+   bi_book = gb.bi_book
+}

@@ -2,9 +2,8 @@
 -- Stanford GraphBase ffi bounding
 -- Written by Soojin Nam. Public Domain.
 
-local gb_graph = require "gb.graph"
+require "gb.graph"
 local ffi = require "ffi"
-local ffi_load = ffi.load
 
 
 ffi.cdef[[
@@ -25,7 +24,7 @@ extern void req_128(Vertex*,long);
 ]]
 
 
-local gb = ffi_load "gb"
+local gb = ffi.load "gb"
 
 
 local _M = {}
@@ -33,45 +32,14 @@ local _M = {}
 
 _M.init_dlist = gb.init_dlist
 _M.init_128 = gb.init_128
-
-function _M.dijkstra (uu, vv, gg, hh)
-    return gb.dijkstra(uu._v, vv._v, gg._g, hh)
-end
-
-
-function _M.print_dijkstra_result (vv)
-   gb.print_dijkstra_result(vv._v)
-end
-
-
-function _M.enlist (v, d)
-   gb.enlist(v._v, d)
-end
-
-
-function _M.reenlist (v, d)
-   gb.reenlist(v._v, d)
-end
-
-
-function _M.del_first ()
-   return gb.del_first()
-end
-
-
-function _M.del_128 ()
-   return gb.del_128()
-end
-
-
-function _M.enq_128 (v, d)
-   gb.enq_128(v._v, d)
-end
-
-
-function _M.req_128 (v, d)
-   gb.req_128(v._v, d)
-end
+_M.dijkstra = gb.dijkstra
+_M.print_dijkstra_result = gb.print_dijkstra_result
+_M.enlist = gb.enlist
+_M.reenlist =gb.reenlist
+_M.del_first = gb.del_first
+_M.del_128 = gb.del_128
+_M.enq_128 = gb.enq_128
+_M.req_128 = gb.req_128
 
 
 return _M

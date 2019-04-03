@@ -4,8 +4,6 @@
 
 require "gb.graph"
 local ffi = require "ffi"
-local ffi_cast = ffi.cast
-local ffi_load = ffi.load
 
 
 ffi.cdef[[
@@ -14,19 +12,19 @@ extern Graph*restore_graph();
 ]]
 
 
-local gb = ffi_load "gb"
+local gb = ffi.load "gb"
 
 
 local _M = {}
 
 
 function _M.save_graph (g, f)
-    return gb.save_graph(g._g, ffi_cast("char*", f))
+   return gb.save_graph(g, ffi.cast("char*", f))
 end
 
 
 function _M.restore_graph (f)
-    return sgb.graph(gb.restore_graph(ffi_cast("char*", f)))
+   return gb.restore_graph(ffi.cast("char*", f))
 end
 
 

@@ -3,11 +3,8 @@
 -- Written by Soojin Nam. Public Domain.
 
 
-local gb_graph = require "gb.graph"
+require "gb.graph"
 local ffi = require "ffi"
-local ffi_cast = ffi.cast
-local ffi_load = ffi.load
-local graph = gb_graph.graph
 
 
 ffi.cdef[[
@@ -28,79 +25,29 @@ extern Graph*wheel(unsigned long,unsigned long,long);
 ]]
 
 
-local gb = ffi_load "gb"
+local gb = ffi.load "gb"
 
 
 local _M = {}
 
 
-function _M.board (...)
-    return graph(gb.board(...))
-end
-
-
-function _M.simplex (...)
-    return graph(gb.simplex(...))
-end
-
-
-function _M.subsets (...)
-    return graph(gb.subsets(...))
-end
-
-
-function _M.perms (...)
-    return graph(gb.perms(...))
-end
-
-
-function _M.parts (...)
-    return graph(gb.parts(...))
-end
-
-
-function _M.binary (...)
-    return graph(gb.binary(...))
-end
-
-
-function _M.complement (g, ...)
-    return graph(gb.complement(g._g, ...))
-end
-
-
-function _M.gunion (g, gg, ...)
-    return graph(gb.gunion(g._g, gg._g, ...))
-end
-
-
-function _M.intersection (g, gg, ...)
-    return graph(gb.intersection(g._g, gg._g, ...))
-end
-
-
-function _M.lines (g, ...)
-    return graph(gb.lines(g._g, ...))
-end
-
-
-function _M.product (g, gg, ...)
-    return graph(gb.product(g._g, gg._g, ...))
-end
+_M.board = gb.board
+_M.simplex = gb.simplex
+_M.subsets = gb.subsets
+_M.perms = gb.perms
+_M.parts = gb.parts
+_M.binary = gb.binary
+_M.complement = gb.complement
+_M.gunion = gb.gunion
+_M.intersecton = gb.intersection
+_M.lines = gb.lines
+_M.product = gb.product
+_M.bi_complete = gb.bi_complete
+_M.wheel = gb.wheel
 
 
 function _M.induced (g, f, ...)
-    return graph(gb.induced(g._g, ffi_cast("char*", f), ...))
-end
-
-
-function _M.bi_complete (...)
-    return graph(gb.bi_complete(...))
-end
-
-
-function _M.wheel (...)
-    return graph(gb.wheel(...))
+   return gb.induced(g, ffi.cast("char*", f), ...)
 end
 
 

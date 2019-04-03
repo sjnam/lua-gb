@@ -3,9 +3,6 @@
 -- Written by Soojin Nam. Public Domain.
 
 local ffi = require "ffi"
-local ffi_cast = ffi.cast
-local ffi_load = ffi.load
-local ffi_string = ffi.string
 local str_byte = string.byte
 local str_char = string.char
 
@@ -30,7 +27,7 @@ extern long gb_raw_close();
 ]]
 
 
-local gb = ffi_load "gb"
+local gb = ffi.load "gb"
 
 
 local _M = {}
@@ -46,37 +43,37 @@ _M.gb_raw_close = gb.gb_raw_close
 
 
 function _M.gb_char ()
-    return str_char(gb.gb_char())
+   return str_char(gb.gb_char())
 end
 
 
 function _M.new_checksum (s, old_checksum)
-    return gb.new_checksum(ffi_cast("char*", s), old_checksum)
+   return gb.new_checksum(ffi.cast("char*", s), old_checksum)
 end
 
 
 function _M.gb_string (p, c)
-    return gb.gb_string(p, str_byte(c))
+   return gb.gb_string(p, str_byte(c))
 end
 
 
 function _M.gb_raw_open (f)
-    gb.gb_raw_open(ffi_cast("char*", f))
+   gb.gb_raw_open(ffi.cast("char*", f))
 end
 
 
 function _M.gb_open (f)
-    return gb.gb_open(ffi_cast("char*", f)) == 0
+   return gb.gb_open(ffi.cast("char*", f)) == 0
 end
 
 
 function _M.gb_close ()
-    return gb.gb_close() == 0
+   return gb.gb_close() == 0
 end
 
 
 function _M.gb_eof ()
-    return gb.gb_eof() ~= 0
+   return gb.gb_eof() ~= 0
 end
 
 

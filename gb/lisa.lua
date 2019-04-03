@@ -2,10 +2,8 @@
 -- Stanford GraphBase ffi bounding
 -- Written by Soojin Nam. Public Domain.
 
-local gb_graph = require "gb.graph"
+require "gb.graph"
 local ffi = require "ffi"
-local ffi_load = ffi.load
-local graph = gb_graph.graph
 
 
 ffi.cdef[[
@@ -16,23 +14,15 @@ extern char lisa_id[];
 ]]
 
 
-local gb = ffi_load "gb"
+local gb = ffi.load "gb"
 
 
 local _M = {}
 
 
 _M.lisa = gb.lisa
-
-
-function _M.plane_lisa (...)
-    return graph(gb.plane_lisa(...))
-end
-
-
-function _M.bi_lisa (...)
-    return graph(gb.bi_lisa(...))
-end
+_M.plane_lisa = gb.plane_lisa
+_M.bi_lisa = gb.bi_lisa
 
 
 return _M

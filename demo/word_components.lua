@@ -1,18 +1,14 @@
 local ffi = require "ffi"
-local gb_graph = require "gb.graph"
+require "gb.graph"
 local gb_words = require "gb.words"
 local NULL = ffi.null
-local print = print
-local ipairs = ipairs
-local tonumber = tonumber
-local sformat = string.format
 local io_write = io.write
 local str = ffi.string
 local words = gb_words.words
 
 
 local function printf (...)
-   io_write(sformat(...))
+   io_write(string.format(...))
 end
 
 
@@ -39,8 +35,10 @@ end
 local g = words(0, NULL, 0, 0)
 local n, isol, comp, m = 0, 0, 0, 0
 
-print("Component analysis of "..g.id)
-for _, v in ipairs(g.vertices) do
+print("Component analysis of "..str(g.id))
+local vertices = g.vertices
+for i=0,tonumber(g.n)-1 do
+   local v = vertices + i
    n = n + 1
    printf("%4d: %5d %s", n, tonumber(v.u.I), str(v.name))
    v.z.V = v
@@ -109,7 +107,8 @@ for _, v in ipairs(g.vertices) do
 end
 
 print("\nThe following non-isolated words didn't join the giant component:")
-for _, v in ipairs(g.vertices) do
+for i=0,tonumber(g.n)-1 do
+   local v = vertices + i
    if master(v) == v and size(v) > 1 and size(v) + size(v) < g.n then
       io_write(str(v.name))
       local c = 1

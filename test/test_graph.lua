@@ -11,7 +11,7 @@ end
 
 local u = g.vertices
 local v = u[2]
-u.name = gb_graph.gb_save_string("vertex 0")
+u.name = ffi.cast("char*", gb_graph.gb_save_string("vertex 0"))
 v.name = ffi.cast("char*", gb_graph.gb_save_string("vertex 1"))
 
 if gb_graph.gb_alloc(0, s) ~= ffi.null then

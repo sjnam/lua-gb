@@ -5,9 +5,6 @@
 local ffi = require "ffi"
 local NULL = ffi.null
 local tonumber = tonumber
-local ffi_load = ffi.load
-local ffi_cast = ffi.cast
-local ffi_string = ffi.string
 
 
 ffi.cdef[[
@@ -73,7 +70,7 @@ extern Vertex*hash_lookup(char*,Graph*);
 ]]
 
 
-local gb = ffi_load "gb"
+local gb = ffi.load "gb"
 
 
 local _M = {
@@ -81,96 +78,43 @@ local _M = {
 }
 
 
-local graph = function (cdata)
-   if cdata == NULL then
-      return NULL
-   end
-   local g = {
-      _g = cdata,
-      n = tonumber(cdata.n),
-      m = tonumber(cdata.m),
-      id = ffi_string(cdata.id)
-   }
-   local vertices = {}
-   for i=0,g.n-1 do
-      vertices[#vertices+1] = cdata.vertices + i
-   end
-   g.vertices = vertices
-   return g
-end
-
-
-_M.graph = graph
-
-_M.gb_alloc = gb.gb_alloc
 _M.gb_free = gb.gb_free
+_M.gb_alloc = gb.gb_alloc
+_M.gb_new_graph = gb.gb_new_graph
+_M.gb_new_arc = gb.gb_new_arc
+_M.gb_virgin_arc = gb.gb_virgin_arc
+_M.gb_new_arc = gb.gb_new_arc
+_M.switch_to_graph = gb.switch_to_graph
+_M.gb_recycle = gb.gb_recycle
+_M.hash_in = gb.hash_in
+_M.hash_setup = gb.hash_setup
 
 
 function _M.make_compound_id (g, s1, gg, s2)
-   gb.make_compound_id(g._g, ffi_cast("char*", s1),
-                       gg._g, ffi_cast("char*", s2))
+   gb.make_compound_id(g._g, ffi.cast("char*", s1),
+                       gg._g, ffi.cast("char*", s2))
 end
 
 
 function _M.make_double_compound_id (g, s1, g, s2, ggg, s3)
-   gb.make_double_compound_id(g._g, ffi_cast("char*", s1),
-                              gg._g, ffi_cast("char*", s2),
-                              ggg._g, ffi_cast("char*", s3))
-end
-
-
-function _M.gb_new_graph (n)
-   return graph(gb.gb_new_graph(n))
-end
-
-
-function _M.gb_new_arc (u, v, len)
-   gb.gb_new_arc(u._v, v._v, len)
-end
-
-
-function _M.gb_virgin_arc ()
-   return arc(gb.gb_virgin_arc())
-end
-
-
-function _M.gb_new_arc (u, v, len)
-   gb.gb_new_arc(u._v, v._v, len)
+   gb.make_double_compound_id(g._g, ffi.cast("char*", s1),
+                              gg._g, ffi.cast("char*", s2),
+                              ggg._g, ffi.cast("char*", s3))
 end
 
 
 function _M.gb_save_string (s)
-   return ffi_string(gb.gb_save_string(ffi_cast("char*", s)))
-end
-
-
-function _M.switch_to_graph (g)
-   gb.switch_to_graph(g._g)
-end
-
-
-function _M.gb_recycle (g)
-   gb.gb_recycle(g._g)
-end
-
-
-function _M.hash_in (v)
-   gb.hash_in(v._v)
+   return ffi.string(gb.gb_save_string(ffi.cast("char*", s)))
 end
 
 
 function _M.hash_out (s)
-   return gb.hash_out(ffi_cast("char*", s))
-end
-
-
-function _M.hash_setup (g)
-   gb.hash_setup(g._g)
+   return gb.hash_out(ffi.cast("char*", s))
 end
 
 
 function _M.hash_lookup (s, g)
-   return gb.hash_lookup(ffi_cast("char*", s), g._g)
+   return gb.hash_lookup(ffi.cast("char*", s), g)
 end
 
 

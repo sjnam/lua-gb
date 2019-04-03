@@ -2,11 +2,8 @@
 -- Stanford GraphBase ffi bounding
 -- Written by Soojin Nam. Public Domain.
 
-local gb_graph = require "gb.graph"
+require "gb.graph"
 local ffi = require "ffi"
-local ffi_load = ffi.load
-local ffi_cast = ffi.cast
-local graph = gb_graph.graph
 
 
 ffi.cdef[[
@@ -20,39 +17,25 @@ extern unsigned long risc_state[];
 ]]
 
 
-local gb = ffi_load "gb"
+local gb = ffi.load "gb"
 
 
 local _M = {}
 
 
-function _M.risc (...)
-    return graph(gb.risc(...))
-end
-
-
-function _M.prod (...)
-    return graph(gb.prod(...))
-end
-
-
-function _M.print_gates (g)
-    return graph(gb.print_gates(g._g))
-end
+_M.risc = gb.risc
+_M.prod = gb.prod
+_M.print_gates = gb.print_gates
+_M.run_risc = gb.run_risc
 
 
 function _M.gate_eval (g, in_vec, out_vec)
-   return gb.gate_eval(g._g, ffi_cast("char*", in_vec), ffi_cast("char*", out_vec))
+   return gb.gate_eval(g, ffi.cast("char*", in_vec), ffi.cast("char*", out_vec))
 end
 
 
 function _M.partial_gates (g, r, prob, seed, buf)
-    return graph(gb.partial_gates(g._g, r, prob, seed, ffi_cast("char*", buf)))
-end
-
-
-function _M.run_risc (g, ...)
-   return gb.run_risc(g._g, ...)
+   return gb.partial_gates(g, r, prob, seed, ffi.cast("char*", buf))
 end
 
 
