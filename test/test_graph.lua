@@ -1,8 +1,5 @@
-
 local gb_graph = require "gb.graph"
 local ffi = require "ffi"
-local error = error
-
 
 local s = ffi.new("Area")
 
@@ -15,7 +12,7 @@ end
 local u = g.vertices
 local v = u[2]
 u.name = gb_graph.gb_save_string("vertex 0")
-v.name = gb_graph.gb_save_string("vertex 1")
+v.name = ffi.cast("char*", gb_graph.gb_save_string("vertex 1"))
 
 if gb_graph.gb_alloc(0, s) ~= ffi.null then
     print("Allocation error 2 wasn't reported properly!")
