@@ -16,8 +16,26 @@ extern void delaunay(Graph*,void[](*)());
 local gb = ffi.load "gb"
 
 
-return {
+local _M = {
    plane = gb.plane,
    plane_miles = gb.plane_miles,
    delaunay = gb.delaunay
 }
+
+
+function _M.x_coord (v)
+   return tonumber(v.x.I)
+end
+
+
+function _M.y_coord (v)
+   return tonumber(v.y.I)
+end
+
+
+function _M.z_coord (v)
+   return tonumber(v.z.I)
+end
+
+
+return _M

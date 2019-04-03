@@ -14,6 +14,14 @@ extern Graph*roget(unsigned long,unsigned long,unsigned long,long);
 local gb = ffi.load "gb"
 
 
-return {
+local _M = {
    roget = gb.roget
 }
+
+
+function _M.cat_no (v)
+   return tonumber(v.u.I)
+end
+
+
+return _M

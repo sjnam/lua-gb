@@ -17,8 +17,36 @@ extern char lisa_id[];
 local gb = ffi.load "gb"
 
 
-return {
+local _M = {
    lisa = gb.lisa,
    plane_lisa = gb.plane_lisa,
    bi_lisa = gb.bi_lisa
 }
+
+
+function _M.pixel_value (v)
+   return tonumber(v.x.I)
+end
+
+
+function _M.first_pixel (v)
+   return tonumber(v.y.I)
+end
+
+
+function _M.last_pixel (v)
+   return tonumber(v.z.I)
+end
+
+
+function _M.matrix_rows (g)
+   return tonumber(g.uu.I)
+end
+
+
+function _M.matrix_cols (g)
+   return tonumber(g.vv.I)
+end
+
+
+return _M

@@ -15,10 +15,9 @@ extern Vertex*find_word(char*,void(*)());
 local gb = ffi.load "gb"
 
 
-local _M = {}
-
-
-_M.words = gb.words
+local _M = {
+   words = gb.words
+}
 
 
 function _M.find_word (q, f)
@@ -28,6 +27,11 @@ end
 
 function _M.weight (v)
    return tonumber(v.u.I)
+end
+
+
+function _M.loc (v)
+   return tonumber(v.a.I)
 end
 
 
