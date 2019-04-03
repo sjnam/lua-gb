@@ -12,21 +12,33 @@ local function printf (...)
 end
 
 
-local function link (vx)
+local function link (vx, v)
    -- link to next vertex in component (occupies utility field |z|)
-   return vx.z.V
+   if v then
+      vx.z.V = v
+   else
+      return vx.z.V
+   end
 end
 
 
-local function master (vx)
+local function master (vx, v)
    -- pointer to master vertex in component
-   return vx.y.V
+   if v then
+      vx.y.V = v
+   else
+      return vx.y.V
+   end
 end
 
 
-local function size (vx)
+local function size (vx, v)
    -- size of component, kept up to date for master vertices only
-   return vx.x.I
+   if v then
+      vx.x.I = v
+   else
+      return vx.x.I
+   end
 end
 
 
@@ -41,9 +53,9 @@ for i=0,tonumber(g.n)-1 do
    local v = vertices + i
    n = n + 1
    printf("%4d: %5d %s", n, tonumber(v.u.I), str(v.name))
-   v.z.V = v
-   v.y.V = v
-   v.x.I = 1
+   link(v, v)
+   master(v, v)
+   size(v, 1)
    isol = isol + 1
    comp = comp + 1
    local a = v.arcs
@@ -68,11 +80,11 @@ for i=0,tonumber(g.n)-1 do
                else
                   c = c + 1
                end
-               w.x.I = size(w) + size(u)
+               size(w, size(w) + size(u))
                if size(u) == 1 then isol = isol - 1 end
                t = link(u)
                while t ~= u do
-                  t.y.V = w
+                  master(t, w)
                   t = link(t)
                end
                u.y.V = w
@@ -85,18 +97,18 @@ for i=0,tonumber(g.n)-1 do
                   c = c + 1
                end
                if size(u) == 1 then isol = isol - 1 end
-               u.x.I = size(u) + size(w)
+               size(u, size(u) + size(w))
                if size(w) == 1 then isol = isol - 1 end
                t = link(w)
                while t ~= w do
-                  t.y.V = u
+                  master(t, u)
                   t = link(t)
                end
-               w.y.V = u
+               master(w, u)
             end
             t = link(u)
-            u.z.V = link(w)
-            w.z.V = t
+            link(u, link(w))
+            link(w, t)
             comp = comp - 1
          end
          a = a.next
