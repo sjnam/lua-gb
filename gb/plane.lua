@@ -16,12 +16,8 @@ extern void delaunay(Graph*,void[](*)());
 local gb = ffi.load "gb"
 
 
-local _M = {}
-
-
-_M.plane = gb.plane
-_M.plane_miles = gb.plane_miles
-_M.delaunay = gb.delaunay
-
-
-return _M
+return {
+   plane = gb.plane,
+   plane_miles = gb.plane_miles,
+   delaunay = gb.delaunay
+}

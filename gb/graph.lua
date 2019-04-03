@@ -3,8 +3,6 @@
 -- Written by Soojin Nam. Public Domain.
 
 local ffi = require "ffi"
-local NULL = ffi.null
-local tonumber = tonumber
 
 
 ffi.cdef[[

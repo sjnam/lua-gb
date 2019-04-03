@@ -17,12 +17,8 @@ extern char lisa_id[];
 local gb = ffi.load "gb"
 
 
-local _M = {}
-
-
-_M.lisa = gb.lisa
-_M.plane_lisa = gb.plane_lisa
-_M.bi_lisa = gb.bi_lisa
-
-
-return _M
+return {
+   lisa = gb.lisa,
+   plane_lisa = gb.plane_lisa,
+   bi_lisa = gb.bi_lisa
+}
