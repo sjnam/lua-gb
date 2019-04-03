@@ -76,6 +76,18 @@ local _M = {
 }
 
 
+_M.alloc_fault = -1
+_M.no_room = 1
+_M.early_data_fault = 10
+_M.late_data_fault = 11
+_M.syntax_error = 20
+_M.bad_specs = 30
+_M.very_bad_specs = 40
+_M.missing_operand = 50
+_M.invalid_operand = 60
+_M.impossible = 90
+
+
 _M.gb_free = gb.gb_free
 _M.gb_alloc = gb.gb_alloc
 _M.gb_new_graph = gb.gb_new_graph
@@ -86,6 +98,22 @@ _M.switch_to_graph = gb.switch_to_graph
 _M.gb_recycle = gb.gb_recycle
 _M.hash_in = gb.hash_in
 _M.hash_setup = gb.hash_setup
+
+
+function _M.gb_typed_alloc (n, t, s)
+   return gb.gb_alloc(n * ffi.C.sizeof(t), s)
+end
+
+
+function _M.n_1 (g)
+   return tonumber(g.uu.I)
+end
+
+
+function _M.mark_bipartite (g, n1)
+   g.uu.I = n1
+   g.util_types[8] = string.byte('I')
+end
 
 
 function _M.make_compound_id (g, s1, gg, s2)
