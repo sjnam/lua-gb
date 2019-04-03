@@ -1,10 +1,11 @@
-local ffi = require "ffi"
 require "gb.graph"
 local gb_words = require "gb.words"
+local ffi = require "ffi"
 local NULL = ffi.null
 local io_write = io.write
 local str = ffi.string
 local words = gb_words.words
+local weight = gb_words.weight
 
 
 local function printf (...)
@@ -37,7 +38,7 @@ local function size (vx, v)
    if v then
       vx.x.I = v
    else
-      return vx.x.I
+      return tonumber(vx.x.I)
    end
 end
 
@@ -52,7 +53,7 @@ local vertices = g.vertices
 for i=0,tonumber(g.n)-1 do
    local v = vertices + i
    n = n + 1
-   printf("%4d: %5d %s", n, tonumber(v.u.I), str(v.name))
+   printf("%4d: %5d %s", n, weight(v), str(v.name))
    link(v, v)
    master(v, v)
    size(v, 1)
@@ -76,7 +77,7 @@ for i=0,tonumber(g.n)-1 do
                if c > 0 then
                   c = c + 1
                   printf("%s %s[%d]", (c==2 and " with" or ","),
-                         str(u.name), tonumber(size(u)))
+                         str(u.name), size(u))
                else
                   c = c + 1
                end
@@ -92,7 +93,7 @@ for i=0,tonumber(g.n)-1 do
                if c > 0 then
                   c = c + 1
                   printf("%s %s[%d]", (c==2 and " with" or ","),
-                         str(w.name), tonumber(size(w)))
+                         str(w.name), size(w))
                else
                   c = c + 1
                end
@@ -113,7 +114,7 @@ for i=0,tonumber(g.n)-1 do
          end
          a = a.next
       end
-      printf(" in %s[%d]", str(master(v).name), tonumber(size(master(v))))
+      printf(" in %s[%d]", str(master(v).name), size(master(v)))
    end
    printf("; c=%d,i=%d,m=%d\n", comp, isol, m)
 end

@@ -26,4 +26,9 @@ function _M.find_word (q, f)
 end
 
 
+function _M.weight (v)
+   return tonumber(v.u.I)
+end
+
+
 return _M
