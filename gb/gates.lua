@@ -44,45 +44,45 @@ end
 
 
 function _M.val (v)
-    return tonumber(v.x.I)
+   return tonumber(v.x.I)
 end
 
 
 function _M.typ (v)
-    return tonumber(v.y.I)
+   return tonumber(v.y.I)
 end
 
 
 function _M.alt (v)
-    return v.z.V
+   return v.z.V
 end
 
 
 function _M.outs (g)
-    return g.zz.A
+   return g.zz.A
 end
 
 
 function _M.is_boolean (v)
-    return v <= 1
+   return v <= 1
 end
 
 
 function _M.the_boolean (v)
-    return v ~= 0
+   return v ~= 0
 end
 
 
 function _M.tip_value (v)
-    if v <= 1 then
-        return v ~= 0
-    end
-    return v.val
+   if v <= 1 then
+      return v ~= 0
+   end
+   return v.val
 end
 
 
 function _M.bit (v)
-    return tonumber(v.z.I)
+   return tonumber(v.z.I)
 end
 
 

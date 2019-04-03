@@ -24,27 +24,27 @@ local _M = {
 
 
 function _M.desc (v)
-    return ffi.string(v.z.S)
+   return ffi.string(v.z.S)
 end
 
 
 function _M.in_count (v)
-    return tonumber(v.y.I)
+   return tonumber(v.y.I)
 end
 
 
 function _M.out_count (v)
-    return tonumber(v.x.I)
+   return tonumber(v.x.I)
 end
 
 
 function _M.short_code (v)
-    return tonumber(v.u.I)
+   return tonumber(v.u.I)
 end
 
 
 function _M.chap_no (a)
-    return tonumber(a.a.I)
+   return tonumber(a.a.I)
 end
 
 
