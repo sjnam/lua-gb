@@ -64,6 +64,7 @@ end
 
 
 function _M.is_boolean (v)
+   local v = ffi.cast("unsigned long", v)
    return v <= 1
 end
 

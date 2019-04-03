@@ -8,7 +8,7 @@ local ffi = require "ffi"
 
 ffi.cdef[[
 extern long save_graph(Graph*,char*);
-extern Graph*restore_graph();
+extern Graph*restore_graph(char*);
 ]]
 
 

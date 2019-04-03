@@ -76,6 +76,8 @@ local _M = {
 }
 
 
+_M.panic_code = 0
+_M.verbose = 0
 _M.alloc_fault = -1
 _M.no_room = 1
 _M.early_data_fault = 10
@@ -101,7 +103,7 @@ _M.hash_setup = gb.hash_setup
 
 
 function _M.gb_typed_alloc (n, t, s)
-   return gb.gb_alloc(n * ffi.C.sizeof(t), s)
+   return gb.gb_alloc(n * ffi.sizeof(t), s)
 end
 
 
@@ -130,7 +132,7 @@ end
 
 
 function _M.gb_save_string (s)
-   return ffi.string(gb.gb_save_string(ffi.cast("char*", s)))
+   return gb.gb_save_string(ffi.cast("char*", s))
 end
 
 

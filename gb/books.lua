@@ -17,10 +17,17 @@ extern char*chap_name[];
 local gb = ffi.load "gb"
 
 
-local _M = {
-   book = gb.book,
-   bi_book = gb.bi_book
-}
+local _M = {}
+
+
+function _M.book (title, ...)
+   return gb.book(ffi.cast("char*", title), ...)
+end
+
+
+function _M.bi_book (title, ...)
+   return gb.bi_book(ffi.cast("char*", title), ...)
+end
 
 
 function _M.desc (v)
