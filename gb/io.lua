@@ -33,7 +33,6 @@ local gb = ffi.load "gb"
 local _M = {}
 
 
-_M.io_erros = 0
 _M.imap_chr = gb.imap_chr
 _M.imap_ord = gb.imap_ord
 _M.gb_newline = gb.gb_newline

@@ -49,6 +49,7 @@ _M.direct = 1
 _M.strong = 2
 _M.IND_GRAPH = 1000000000
 
+
 function _M.induced (g, f, ...)
    return gb.induced(g, ffi.cast("char*", f), ...)
 end

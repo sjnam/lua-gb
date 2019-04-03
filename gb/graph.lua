@@ -76,20 +76,6 @@ local _M = {
 }
 
 
-_M.panic_code = 0
-_M.verbose = 0
-_M.alloc_fault = -1
-_M.no_room = 1
-_M.early_data_fault = 10
-_M.late_data_fault = 11
-_M.syntax_error = 20
-_M.bad_specs = 30
-_M.very_bad_specs = 40
-_M.missing_operand = 50
-_M.invalid_operand = 60
-_M.impossible = 90
-
-
 _M.gb_free = gb.gb_free
 _M.gb_alloc = gb.gb_alloc
 _M.gb_new_graph = gb.gb_new_graph
