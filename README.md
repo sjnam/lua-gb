@@ -17,31 +17,30 @@ To install lua-gb you need to install [libgb](https://www-cs-faculty.stanford.ed
 Samples
 =======
 ````lua
+local ffi = require "ffi"
 local gb_save = require "gb.save"
 local gb_basic = require "gb.basic"
-local board = gb_basic.board
-local gunion = gb_basic.gunion
-local save_graph = gb_save.save_graph
+local str = ffi.string
 
-local function printf (...)
-    io.write(string.format(...))
-end
+local g = gb_basic.board(3, 4, 0, 0, -1, 0, 0)
+local gg = gb_basic.board(3, 4, 0, 0, -2, 0, 0)
+local ggg = gb_basic.gunion(g, gg, 0, 0)
+gb_save.save_graph(ggg, "queen.gb")
 
-local g = board(3, 4, 0, 0, -1, 0, 0)
-local gg = board(3, 4, 0, 0, -2, 0, 0)
-local ggg = gunion(g, gg, 0, 0)
-
-save_graph(ggg, "queen.gb")
-
+local vertices = ggg.vertices
+local n, m = tonumber(ggg.n), tonumber(ggg.m)
 print("Queen Moves on a 3x4 Board\n")
-printf("  The graph whose official name is\n%s\n", ggg.id)
-printf("  has %d vertices and %d arcs:\n\n", ggg.n, ggg.m)
+print("  The graph whose official name is\n"..str(ggg.id))
+print("  has "..n.." vertices and "..m.." arcs:\n")
 
-for _, v in ipairs(ggg.vertices) do
-    print(v.name)
-    for _, a in ipairs(v.arcs) do
-        printf("  -> %s, length %d\n", a.tip.name, a.len)
-    end
+for i=0,n-1 do
+   local v = vertices + i
+   print(str(v.name))
+   local a = v.arcs
+   while a ~= ffi.null do
+      print("  -> "..str(a.tip.name)..", length "..tonumber(a.len))
+      a = a.next
+   end
 end
 ````
 
