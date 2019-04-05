@@ -6,11 +6,7 @@ local gb = ffi.load "gb"
 local str = ffi.string
 local tonumber = tonumber
 local cat_no = gb_roget.cat_no
-
-
-local function printf (...)
-   io.write(string.format(...))
-end
+local vertices = gb_graph.vertices
 
 
 local function specs (v)
@@ -72,6 +68,11 @@ local function arc_from (v, v1)
 end
 
 
+local function printf (...)
+   io.write(string.format(...))
+end
+
+
 -- main
 local n, d, p, s = 0, 0, 0, 0
 
@@ -84,20 +85,17 @@ end
 
 printf("Reachability analysis of %s\n\n", str(g.id))
 
-local v = g.vertices + g.n - 1
-while v >= g.vertices do
+for v in vertices(g) do
    rank(v, 0)
    untagged(v, v.arcs)
-   v = v - 1
 end
 
 local nn = 0
 local active_stack, settled_stack
 
-local vv = g.vertices
-while vv < g.vertices + g.n do
+for vv in vertices(g) do
    if rank(vv) == 0 then
-      v = vv
+      local v = vv
       v.y.V = nil
       nn = nn + 1
       rank(v, nn)
@@ -150,11 +148,10 @@ while vv < g.vertices + g.n do
          end
       until v == nil
    end
-   vv = vv + 1
 end
 
 print("\nLinks between components:")
-v = settled_stack
+local v = settled_stack
 while v ~= nil do
    local u, a = parent(v), v.arcs
    arc_from(u, u)

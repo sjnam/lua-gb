@@ -132,4 +132,14 @@ function _M.hash_lookup (s, g)
 end
 
 
+function _M.vertices (g)
+   local i = 0
+   local n = tonumber(g.n)
+   return function ()
+      i = i + 1
+      if i <= n then return g.vertices+i-1 end
+   end
+end
+
+
 return _M
