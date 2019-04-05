@@ -142,4 +142,17 @@ function _M.vertices (g)
 end
 
 
+function _M.arcs (v)
+   local i = 0
+   local a = v.arcs
+   return function ()
+      i = i + 1
+      if i > 1 then
+         a = a.next
+      end
+      if a ~= nil then return a end
+   end
+end
+
+
 return _M
