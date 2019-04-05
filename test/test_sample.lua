@@ -33,6 +33,7 @@ local subsets = gb_basic.subsets
 local complement = gb_basic.complement
 local save_graph = gb_save.save_graph
 local restore_graph = gb_save.restore_graph
+local arcs = gb_graph.arcs
 local gb_recycle = gb_graph.gb_recycle
 local gb_typed_alloc = gb_graph.gb_typed_alloc
 local gb_save_string = gb_graph.gb_save_string
@@ -98,11 +99,9 @@ pr_vert = function (v, l, s)
       pr_util(v.y, s[4], l-1, s)
       pr_util(v.z, s[5], l-1, s)
       if l > 0 then
-         local a = v.arcs
-         while a ~= NULL do
+         for a in arcs(v) do
             io_write("\n   ")
             pr_arc(a, 1, s)
-            a = a.next
          end
       end
    end
