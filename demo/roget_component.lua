@@ -4,8 +4,12 @@ local gb_roget = require "gb.roget"
 local gb_save = require "gb.save"
 local gb = ffi.load "gb"
 
-local NULL = ffi.null
 local cat_no = gb_roget.cat_no
+
+
+local function printf (...)
+   io.write(string.format(...))
+end
 
 
 local function specs (v)
@@ -71,7 +75,7 @@ end
 local n, d, p, s = 0, 0, 0, 0
 
 local g = gb_roget.roget(n, d, p, s)
-if g == NULL then
+if not g then
    print("Sorry, can't create the graph! (error code "..tonumber(gb.panic_code))
    return
 end
@@ -86,23 +90,22 @@ while v >= g.vertices do
 end
 
 local nn = 0
-local active_stack, settled_stack = NULL, NULL
+local active_stack, settled_stack
 
 local vv = g.vertices
 while vv < g.vertices + g.n do
    if rank(vv) == 0 then
       v = vv
-      parent(v, NULL)
+      v.y.V = nil
       nn = nn + 1
       rank(v, nn)
-      link(v, active_stack)
+      v.w.V = active_stack -- link(v, active_stack)
       active_stack = v
       min(v, v)
-
       repeat
          local u, a
          a = untagged(v)
-         if a ~= NULL then
+         if a ~= nil then
             u = a.tip
             untagged(v, a.next)
             if rank(u) ~= 0 then
@@ -112,7 +115,7 @@ while vv < g.vertices + g.n do
                v = u
                nn = nn + 1
                rank(v, nn)
-               link(v, active_stack)
+               v.w.V = active_stack -- link(v, active_stack)
                active_stack = v
                min(v, v)
             end
@@ -121,16 +124,16 @@ while vv < g.vertices + g.n do
             if min(v) == v then
                local t = active_stack
                active_stack = link(v)
-               link(v, settled_stack)
+               v.w.V = settled_stack -- link(v, settled_stack)
                settled_stack = t
-               io.write(string.format("Strong component `%d %s'", specs(v)))
+               printf("Strong component `%d %s'", specs(v))
                if t == v then print()
                else
                   print(" also includes:")
                   while t ~= v do
-                     io.write(string.format(" %d %s ", specs(t)))
-                     io.write(string.format("(from %d %s;", specs(parent(t))))
-                     io.write(string.format(" ..to %d %s)\n", specs(min(t))))
+                     printf(" %d %s ", specs(t))
+                     printf("(from %d %s;", specs(parent(t)))
+                     printf(" ..to %d %s)\n", specs(min(t)))
                      rank(t, g.n)
                      parent(t, v)
                      t = link(t)
@@ -143,24 +146,24 @@ while vv < g.vertices + g.n do
             end
             v = u
          end
-      until v == NULL
+      until v == nil
    end
    vv = vv + 1
 end
 
 print("\nLinks between components:")
 v = settled_stack
-while v ~= NULL do
+while v ~= nil do
    local u, a = parent(v), v.arcs
    arc_from(u, u)
-   while a ~= NULL do
+   while a ~= nil do
       local w = parent(a.tip)
       if arc_from(w) ~= u then
          arc_from(w, u)
-         io.write(string.format("%d %s ->", specs(u)))
-         io.write(string.format(" %d %s ", specs(w)))
-         io.write(string.format("(e.g., %d %s ->", specs(v)))
-         io.write(string.format(" %d %s)\n", specs(a.tip)))
+         printf("%d %s ->", specs(u))
+         printf(" %d %s ", specs(w))
+         printf("(e.g., %d %s ->", specs(v))
+         printf(" %d %s)\n", specs(a.tip))
       end
       a = a.next
    end
