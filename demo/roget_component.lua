@@ -3,7 +3,8 @@ local gb_graph = require "gb.graph"
 local gb_roget = require "gb.roget"
 local gb_save = require "gb.save"
 local gb = ffi.load "gb"
-
+local str = ffi.string
+local tonumber = tonumber
 local cat_no = gb_roget.cat_no
 
 
@@ -13,7 +14,7 @@ end
 
 
 local function specs (v)
-   return cat_no(v), ffi.string(v.name)
+   return cat_no(v), str(v.name)
 end
 
 
@@ -76,11 +77,12 @@ local n, d, p, s = 0, 0, 0, 0
 
 local g = gb_roget.roget(n, d, p, s)
 if not g then
-   print("Sorry, can't create the graph! (error code "..tonumber(gb.panic_code))
+   printf("Sorry, can't create the graph! (error code %d)\n",
+          tonumber(gb.panic_code))
    return
 end
 
-print("Reachability analysis of "..ffi.string(g.id).."\n")
+printf("Reachability analysis of %s\n\n", str(g.id))
 
 local v = g.vertices + g.n - 1
 while v >= g.vertices do
