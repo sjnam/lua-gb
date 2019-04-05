@@ -4,9 +4,11 @@ local gb_roget = require "gb.roget"
 local gb_save = require "gb.save"
 local gb = ffi.load "gb"
 
+local cat_no = gb_roget.cat_no
+
 
 local function specs (v)
-   return gb_roget.cat_no(v), ffi.string(v-.name)
+   return cat_no(v), ffi.string(v.name)
 end
 
 
@@ -102,15 +104,14 @@ while vv < g.vertices + g.n do
       active_stack = v
       min(v, v)
 
-      while true do
+      repeat
+         local u
          local a = untagged(v)
          if a ~= ffi.null then
             u = a.tip
             untagged(v, a.next)
             if rank(u) ~= 0 then
-               if rank(u) < rand(min(v)) then
-                  min(v, u)
-               end
+               if rank(u) < rank(min(v)) then min(v, u) end
             else
                parent(u, v)
                v = u
@@ -128,14 +129,16 @@ while vv < g.vertices + g.n do
                link(v, settled_stack)
                settled_stack = t
                io.write(string.format("Strong component `%d %s'", specs(v)))
-               if t == v then
-                  print()
+               if t == v then print()
                else
                   print(" also includes:")
                   while t ~= v do
-                     io.write(string.format(" %d %s (from %d %s; ..to %d %s)\n",
-                                            specs(t), specs(parent(t)),
-                                            specs(min(t))))
+                     local n, s = specs(t)
+                     io.write(string.format(" %d %s ", n, s))
+                     n, s = specs(parent(t))
+                     io.write(string.format("(from %d %s;", n, s))
+                     n, s = specs(min(t))
+                     io.write(string.format("..to %d %s)\n", n, s))
                      rank(t, infinity(g))
                      parent(t, v)
                      t = link(t)
@@ -147,30 +150,35 @@ while vv < g.vertices + g.n do
                if rank(min(v)) < rank(min(u)) then
                   min(u, min(v))
                end
-               v = u
             end
-            if v = ffi.null then
-               break
-            end
-            vv = vv + 1
+            v = u
          end
-      end
+      until v == ffi.null
+   end
+   vv = vv + 1
+end
 
-      print("\nLinks between components:")
-      v = settled_stack
-      while v ~= ffi.null do
-         v = link(v)
-         local u = parent(v)
-         arc_from(u, u)
-         local a = v.arcs
-         while a ~= ffi.null do
-            a = a.next
-            local w = parent(a.tip)
-            if arc_from(w) ~= u then
-               arc_from(w, u)
-               printf("%d %s -> %d %s (e.g., %d %s -> %d %s)\n",
-                      specs(u), specs(w), specs(v), specs(a.tip))
-            end
-         end
+print("\nLinks between components:")
+v = settled_stack
+while v ~= ffi.null do
+   local u = parent(v)
+   arc_from(u, u)
+   local a = v.arcs
+   while a ~= ffi.null do
+      local w = parent(a.tip)
+      if arc_from(w) ~= u then
+         arc_from(w, u)
+         local n, s = specs(u)
+         io.write(string.format(" %d %s -> ", n, s))
+         n, s = specs(w)
+         io.write(string.format(" %d %s ", n, s))
+         n, s = specs(v)
+         io.write(string.format("(e.g., %d %s -> ", n, s))
+         n, s = specs(a.tip)
+         io.write(string.format(" %d %s)\n", n, s))
       end
+      a = a.next
+   end
+   v = link(v)
+end
       
