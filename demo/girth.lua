@@ -6,6 +6,8 @@ local gb_raman = require "gb.raman"
 local raman = gb_raman.raman
 local arcs = gb_graph.arcs
 local gb_recycle = gb_graph.gb_recycle
+local band, bxor = bit.band, bit.bxor
+
 
 local function printf (...)
    io.write(string.format(...))
@@ -60,7 +62,8 @@ while true do
          if s <= n then gu = gu + 1 end
       end
 
-      printf("Any such graph must have diameter >= %d and girth <= %d;\n", dl, gu)
+      printf("Any such graph must have diameter >= %d and girth <= %d;\n",
+             dl, gu)
 
       local du
       do
@@ -89,7 +92,7 @@ while true do
                   bb = math.floor((p - aa*aa) / bb)
                   nn = pp
                   pp = y
-                  parity = bit.bxor(parity, 1)
+                  parity = bxor(parity, 1)
                end
                if parity == 0 then du = du - 1 end
             end
@@ -117,7 +120,7 @@ while true do
             gl = 1
             pp = p
             while pp < b1 do
-               if pp >= b2 and bit.band(gl, 1) ~= 0 and bit.band(p, 2) ~= 0 then
+               if pp >= b2 and band(gl, 1) ~= 0 and band(p, 2) ~= 0 then
                   break
                end
                gl = gl + 1
@@ -130,12 +133,10 @@ while true do
       print("Starting at any given vertex, there are")
 
       do
-         local sentinel = g.vertices + n
-         local girth = 999
-         local k = 0
+         local k, c = 0, 1
+         local sentinel, girth = g.vertices+n, 999
          local u = g.vertices
          u.w.V = sentinel
-         local c = 1
          while c ~= 0 do
             local v = u
             u = sentinel
@@ -156,7 +157,8 @@ while true do
                end
                v = v.w.V               
             end
-            printf("%8d vertices at distance %d%s\n", c, k, (c > 0 and "," or "."))
+            printf("%8d vertices at distance %d%s\n", c, k,
+                   (c > 0 and "," or "."))
          end
          printf("So the diameter is %d, and the girth is %d.\n",
                 k-1, tonumber(girth))
