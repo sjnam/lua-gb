@@ -147,9 +147,7 @@ function _M.iter_vertices (vertices, fn)
    local v = vertices
    return function ()
       i = i + 1
-      if i > 1 then
-         v = fn(v)
-      end
+      v = i > 1 and fn(v) or v
       if v ~= nil then return v end
    end
 end
@@ -160,9 +158,7 @@ function _M.arcs (v)
    local a = v.arcs
    return function ()
       i = i + 1
-      if i > 1 then
-         a = a.next
-      end
+      a = i > 1 and a.next or a
       if a ~= nil then return a end
    end
 end
