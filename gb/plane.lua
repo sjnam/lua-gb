@@ -1,5 +1,5 @@
 
--- Stanford GraphBase ffi bounding
+-- Stanford GraphBase ffi binding
 -- Written by Soojin Nam. Public Domain.
 
 require "gb.graph"
