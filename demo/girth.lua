@@ -7,6 +7,7 @@ local raman = gb_raman.raman
 local arcs = gb_graph.arcs
 local gb_recycle = gb_graph.gb_recycle
 local band, bxor = bit.band, bit.bxor
+local floor = math.floor
 
 
 local function printf (...)
@@ -35,13 +36,14 @@ while true do
       local panic_code = gb.panic_code
       printf(" Sorry, I couldn't make that graph (%s).\n",
              panic_code == 40 and "q is out of range" or
-                (panic_code == 41 and "p is out of range" or
-                    (panic_code == 35 and "q is too big" or
-                        (panic_code == 36 and "p is too big" or
-                            (panic_code == 31 and "q isn't prime" or
-                                (panic_code == 37 and "p isn't prime" or
-                                    (panic_code == 33 and "p is a multiple of q" or
-                                        (panic_code == 32 and "q isn't compatible with p=2" or "not enough memory"))))))))
+                panic_code == 41 and "p is out of range" or
+                panic_code == 35 and "q is too big" or
+                panic_code == 36 and "p is too big" or
+                panic_code == 31 and "q isn't prime" or
+                panic_code == 37 and "p isn't prime" or
+                panic_code == 33 and "p is a multiple of q" or
+                panic_code == 32 and "q isn't compatible with p=2" or
+                "not enough memory")
    else
       local bipartite = false
       local n = tonumber(g.n)
@@ -76,7 +78,7 @@ while true do
          end
 
          do
-            local qq = math.floor(pp/nn)
+            local qq = floor(pp/nn)
             if qq * qq > p then
                du = du - 1
             elseif (qq+1) * (qq+1) > p then
@@ -85,11 +87,11 @@ while true do
                local parity = 0
                pp = pp - qq*nn
                while true do
-                  local x = math.floor((aa+qq) / bb)
+                  local x = floor((aa+qq) / bb)
                   local y = nn - x*pp
                   if y <= 0 then break end
                   aa = bb*x - aa
-                  bb = math.floor((p - aa*aa) / bb)
+                  bb = floor((p - aa*aa) / bb)
                   nn = pp
                   pp = y
                   parity = bxor(parity, 1)
