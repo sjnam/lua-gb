@@ -142,6 +142,19 @@ function _M.vertices (g)
 end
 
 
+function _M.iter_vertices (vertices, fn)
+   local i = 0
+   local v = vertices
+   return function ()
+      i = i + 1
+      if i > 1 then
+         v = fn(v)
+      end
+      if v ~= nil then return v end
+   end
+end
+
+
 function _M.arcs (v)
    local i = 0
    local a = v.arcs

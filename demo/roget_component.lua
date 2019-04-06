@@ -6,7 +6,9 @@ local gb = ffi.load "gb"
 local str = ffi.string
 local tonumber = tonumber
 local cat_no = gb_roget.cat_no
+local arcs = gb_graph.arcs
 local vertices = gb_graph.vertices
+local iter_vertices = gb_graph.iter_vertices
 
 
 local function specs (v)
@@ -151,11 +153,10 @@ for vv in vertices(g) do
 end
 
 print("\nLinks between components:")
-local v = settled_stack
-while v ~= nil do
-   local u, a = parent(v), v.arcs
+for v in iter_vertices(settled_stack, link) do
+   local u = parent(v)
    arc_from(u, u)
-   while a ~= nil do
+   for a in arcs(v) do
       local w = parent(a.tip)
       if arc_from(w) ~= u then
          arc_from(w, u)
@@ -164,7 +165,5 @@ while v ~= nil do
          printf("(e.g., %d %s ->", specs(v))
          printf(" %d %s)\n", specs(a.tip))
       end
-      a = a.next
    end
-   v = link(v)
 end
