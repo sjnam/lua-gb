@@ -1,3 +1,26 @@
+--[[
+Strong components.
+This demonstration program computes the
+strong components of GraphBase graphs derived from Roget's Thesaurus,
+using a variant of Tarjan's algorithm [R. E. Tarjan, ``Depth-first
+@^Tarjan, Robert Endre@>
+search and linear graph algorithms,'' {\sl SIAM Journal on Computing\/
+\bf1} (1972), 146--160]. We also determine the relationships
+between strong components.
+
+Two vertices belong to the same strong component if and only if they
+are reachable from each other via directed paths.
+
+We will print the strong components in ``reverse topological order'';
+that is, if |v| is reachable from~|u| but |u| is not reachable
+from~|v|, the strong component containing~|v| will be listed before
+the strong component containing~|u|.
+
+Vertices from the |roget| graph are identified both by name and by
+category number.
+--]]
+
+
 local ffi = require "ffi"
 local gb_graph = require "gb.graph"
 local gb_roget = require "gb.roget"

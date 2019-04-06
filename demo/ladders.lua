@@ -1,3 +1,12 @@
+--[[
+Introduction.
+This demonstration program uses graphs
+constructed by the {\sc GB\_WORDS} module to produce
+an interactive program called \.{ladders}, which finds shortest paths
+between two given five-letter words of English.
+--]]
+
+
 local bit = require "bit"
 local ffi = require "ffi"
 local gb_graph = require "gb.graph"

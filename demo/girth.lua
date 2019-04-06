@@ -1,3 +1,53 @@
+--[[
+Introduction.
+This demonstration program uses graphs
+constructed by the |raman| procedure in the {\sc GB\_\,RAMAN} module to produce
+an interactive program called \.{girth}, which computes the girth and
+diameter of a class of Ramanujan graphs.
+
+The girth of a graph is the length of its shortest cycle; the diameter
+is the maximum length of a shortest path between two vertices.
+A Ramanujan graph is a connected, undirected graph in which every vertex
+@^Ramanujan graphs@>
+has degree~|p+1|, with the property that every eigenvalue of its adjacency
+matrix is either $\pm(p+1)$ or has absolute value $\le2\sqrt{\mathstrut p}$.
+
+Exact values for the girth are of interest because the bipartite graphs
+produced by |raman| apparently have larger girth than any other known
+family of regular graphs, even if we consider graphs whose existence
+is known only by nonconstructive methods, except for the cubic ``sextet''
+graphs of Biggs, Hoare, and Weiss [{\sl Combinatorica\/ \bf3} (1983),
+153--165; {\bf4} (1984), 241--245].
+
+Exact values for the diameter are of interest because the diameter of
+any Ramanujan graph is at most twice the minimum possible diameter
+of any regular graph.
+
+The program will prompt you for two numbers, |p| and |q|. These should
+be distinct prime numbers, not too large, with |q>2|.  A graph is
+constructed in which each vertex has degree~|p+1|. The number of
+vertices is $(q^3-q)/2$ if |p| is a quadratic residue modulo~|q|, or
+$q^3-q$ if |p| is not a quadratic residue. In the latter case, the
+graph is bipartite and it is known to have rather large girth.
+
+If |p=2|, the value of |q| is further restricted to be of the form
+$104k+(1,3,9,17,25,27,35,43,49,\allowbreak51,75,81)$. This means that the only
+feasible values of |q| to go with |p=2| are probably 3, 17, and 43;
+the next case, |q=107|, would generate a bipartite graph with
+1,224,936 vertices and 3,674,808 arcs, thus requiring approximately
+113 megabytes of memory (not to mention a nontrivial amount of
+computer time). If you want to compute the girth and diameter
+of Ramanujan graphs for large |p| and/or~|q|, much better methods are
+available based on number theory; the present program is merely a
+demonstration of how to interface with the output of |raman|.
+Incidentally, the graph for |p=2| and |q=43| turns
+out to have 79464 vertices, girth 20, and diameter~22.
+
+The program will examine the graph and compute its girth and its diameter,
+then will prompt you for another choice of |p| and |q|.
+--]]
+
+
 local bit = require "bit"
 local ffi = require "ffi"
 local gb = ffi.load "gb"

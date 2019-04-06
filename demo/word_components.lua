@@ -1,3 +1,12 @@
+--[[
+This simple demonstration program computes the connected
+components of the GraphBase graph of five-letter words. It prints the
+words in order of decreasing weight, showing the number of edges,
+components, and isolated vertices present in the graph defined by the
+first $n$ words for all~$n$.
+--]]
+
+
 local gb_graph = require "gb.graph"
 local gb_words = require "gb.words"
 local ffi = require "ffi"
