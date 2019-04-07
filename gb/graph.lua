@@ -80,6 +80,7 @@ _M.gb_free = gb.gb_free
 _M.gb_alloc = gb.gb_alloc
 _M.gb_new_graph = gb.gb_new_graph
 _M.gb_new_arc = gb.gb_new_arc
+_M.gb_new_edge = gb.gb_new_edge
 _M.gb_virgin_arc = gb.gb_virgin_arc
 _M.gb_new_arc = gb.gb_new_arc
 _M.switch_to_graph = gb.switch_to_graph

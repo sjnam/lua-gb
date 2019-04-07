@@ -77,6 +77,7 @@ local gb_words = require "gb.words"
 local gb_dijk = require "gb.dijk"
 local gb = ffi.load "gb"
 local ffi_new = ffi.new
+local NULL = ffi.null
 local str = ffi.string
 local rshift = bit.rshift
 local words = gb_words.words
@@ -220,8 +221,8 @@ end
 if alph or randm then freq = false end
 if freq then heur = false end
 
-local g = words(n, randm and zero_vector or nil, 0, seed)
-if g == nil then
+local g = words(n, randm and zero_vector or NULL, 0, seed)
+if g == NULL then
    printf("Sorry, I couldn't build a dictionary (trouble code %d)!\n",
           gb.panic_code)
    return
@@ -270,7 +271,7 @@ while true do
    if not goal then break end
 
    gg = gb_new_graph(0)
-   if gg == nil then
+   if gg == NULL then
       printf("Sorry, I couldn't build a dictionary (trouble code %d)!\n",
              gb.panic_code)
       return
@@ -281,7 +282,7 @@ while true do
    local a = gg.vertices + gg.n
    a.name = start
    uu = find_word(start, plant_new_edge)
-   if uu == nil then
+   if uu == NULL then
       uu = gg.vertices + gg.n
       gg.n = gg.n + 1
    end
@@ -291,7 +292,7 @@ while true do
       local a = gg.vertices + gg.n
       a.name = goal
       vv = find_word(goal, plant_new_edge)
-      if vv == nil then
+      if vv == NULL then
          vv = gg.vertices + gg.n
          gg.n = gg.n + 1
       end
@@ -311,7 +312,7 @@ while true do
    end
 
    if not heur then
-      min_dist = dijkstra(uu, vv, gg, nil)
+      min_dist = dijkstra(uu, vv, gg, NULL)
    elseif alph then
       min_dist = dijkstra(uu, vv, gg, alph_heur)
    else
@@ -331,7 +332,7 @@ while true do
          vv = a.tip
          vv.arcs = vv.arcs.next
       end
-      uu.arcs = nil
+      uu.arcs = NULL
       uu = uu - 1
    end
 
