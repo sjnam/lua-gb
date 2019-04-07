@@ -332,6 +332,7 @@ while true do
          vv.arcs = vv.arcs.next
       end
       uu.arcs = nil
+      uu = uu - 1
    end
 
    gb_recycle(gg)
