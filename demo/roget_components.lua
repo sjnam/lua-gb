@@ -192,19 +192,20 @@ end
 local filename
 local n, d, p, s = 0, 0, 0, 0
 for _, a in ipairs(arg) do
-   local x, v = a:match("-(%a)(%d+)")
-   if x == "n" then
+   local k, v = a:match("-(%a)(%d+)")
+   if k == "n" then
       n = tonumber(v)
-   elseif x == "d" then
+   elseif k == "d" then
       d = tonumber(v)
-   elseif x == "p" then
+   elseif k == "p" then
       p = tonumber(v)
-   elseif x == "s" then
+   elseif k == "s" then
       s = tonumber(v)
-   elseif x == nil then
-      v = a:match("-g(%a+)")
-      if v then
-         filename = v
+   else
+      filename = a:match("-g(%a+)")
+      if not filename then
+         printf("Usage: luajit %s [-nN][-dN][-pN][-sN][-gfoo]\n", arg[0])
+         return
       end
    end
 end
