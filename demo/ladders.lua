@@ -170,6 +170,21 @@ local function hamm_heur (v)
 end
 
 
+local function prompt_for_five (sg)
+   local iword, word
+   repeat
+      io.write(sg.." word: ")
+      iword = io.read()
+      word = ffi.new("char[6]", iword)
+      if word[0] == 0 then return nil end
+      if #iword ~= 5 then
+         print("(Please type five lowercase letters and RETURN.)")
+      end
+   until #iword == 5
+   return word
+end
+
+
 -- main
 
 for _, a in ipairs(arg) do
@@ -246,14 +261,13 @@ if alph or freq or heur then
    init_queue, del_min, enqueue, requeue = init_128, del_128,  enq_128, req_128
 end
 
+
 while true do
    print()
-   io.write("Starting word: ")
-   start = ffi.new("char[6]", io.read())
-   if start[0] == 0 then break end
-   io.write("    Goad word: ")
-   goal = ffi.new("char[6]", io.read())
-   if goal[0] == 0 then break end
+   start = prompt_for_five("Starting")
+   if not start then break end
+   goal = prompt_for_five("    Goal")
+   if not goal then break end
 
    gg = gb_new_graph(0)
    if gg == nil then
