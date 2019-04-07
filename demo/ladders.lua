@@ -326,7 +326,7 @@ while true do
    end
 
    uu = g.vertices + gg.n - 1
-   while uu > g.vertices + g.n do
+   while uu >= g.vertices do
       for a in arcs(uu) do
          vv = a.tip
          vv.arcs = vv.arcs.next
