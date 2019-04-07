@@ -101,9 +101,9 @@ local print_dijkstra_result = gb_dijk.print_dijkstra_result
 
 local g, gg, uu, vv
 local start, goal, min_dist
-local n, randm, seed = 0, false, 0
+local n, seed = 0, 0
 local zero_vector = ffi_new("long[9]")
-local verbose, alph, freq, heur, echo = false, false, false, false, false
+local alph, freq, heur, echo, randm = false, false, false, false, false
 
 
 local function printf (...)
@@ -191,7 +191,6 @@ end
 for _, a in ipairs(arg) do
    local k, v = a:match("-(%a)")
    if k == "v" then
-      verbose = true
       gb.verbose = 1
    elseif k == "a" then
       alph = true
@@ -228,7 +227,7 @@ if g == NULL then
    return
 end
 
-if verbose then
+if gb.verbose == 1 then
    if alph then print("(alphabetic distance selected)") end
    if freq then print("(frequency-based distances selected)") end
    if heur then
