@@ -1,9 +1,72 @@
 --[[
-Introduction.
-This demonstration program uses graphs
+@* Introduction. This demonstration program uses graphs
 constructed by the {\sc GB\_WORDS} module to produce
 an interactive program called \.{ladders}, which finds shortest paths
 between two given five-letter words of English.
+
+The program assumes that \UNIX/ conventions are being used. Some code in
+sections listed under `\UNIX/ dependencies' in the index might need to change
+if this program is ported to other operating systems.
+
+\def\<#1>{$\langle${\rm#1}$\rangle$}
+To run the program under \UNIX/, say `\.{ladders} \<options>', where \<options>
+consists of zero or more of the following specifications in any order:
+
+-v Verbosely print all words encountered during the shortest-path
+   computation, showing also their distances from the goal word.
+-a Use alphabetic distance instead of considering adjacent words to be one
+   unit apart; for example, the alphabetic distance from `\.{words}' to
+   `\.{woods}' is~3, because `\.r' is three places from `\.o' in the
+   alphabet.
+-f Use distance based on frequency (see below), instead of considering
+   adjacent words to be one unit apart. This option is ignored if either
+   \.{-a} or \.{-r} has been specified.
+-h Use a lower-bound heuristic to shorten the search (see below). This option
+   is ignored if option \.{-f} has been selected.
+-e Echo the input to the output (useful if input comes from a file instead
+   of from the terminal).
+-n<number> Limit the graph to the |n| most common English words, where |n|
+   is the given \<number>.
+-r<number> Limit the graph to \<number> randomly selected words. This option
+   is incompatible with~\.{-n}.
+-s<number> Use \<number> instead of 0 as the seed for random numbers, to get
+     different random samples or to explore words of equal frequency in
+     a different order.
+
+\noindent Option \.{-f} assigns a cost of 0 to the most common words and a
+cost of 16 to the least common words; a cost between 0 and~16 is assigned to
+words of intermediate frequency. The word ladders that are found will then have
+minimum total cost by this criterion. Experience shows that the \.{-f} option
+tends to give the ``friendliest,'' most intuitively appealing ladders.
+\smallskip
+Option \.{-h} attempts to focus the search by giving priority to words that
+are near the goal. (More precisely, it modifies distances between adjacent
+words by using a heuristic function $\\{hh}(v)$, which would be the shortest
+possible distance between $v$ and the goal if every five-letter combination
+happened to be an English word.) The {\sc GB\_\,DIJK} module explains more
+about such heuristics; this option is most interesting to watch when used in
+conjunction with \.{-v}.
+
+@ The program will prompt you for a starting word. If you simply type
+\<return>, it exits; otherwise you should enter a five-letter word
+(with no uppercase letters) before typing \<return>.
+
+Then the program will prompt you for a goal word. If you simply type
+\<return> at this point, it will go back and ask for a new starting word;
+otherwise you should specify another five-letter word.
+
+Then the program will find and display an optimal word ladder from the start
+to the goal, if there is a path from one to the other
+that changes only one letter at a time.
+
+And then you have a chance to start all over again, with another starting word.
+
+The start and goal words need not be present in the program's graph of
+``known'' words. They are temporarily added to that graph, but removed
+again whenever new start and goal words are given. (Thus you can go
+from \.{sturm} to \.{drang} even though those words aren't English.)
+If the \.{-f} option is being used, the cost of the goal word will be 20
+when it is not in the program's dictionary.
 --]]
 
 
@@ -24,17 +87,22 @@ local gb_recycle = gb_graph.gb_recycle
 local gb_new_edge = gb_graph.gb_new_edge
 local gb_new_graph = gb_graph.gb_new_graph
 local dijkstra = gb_dijk.dijkstra
+local init_queue = gb_dijk.init_queue
+local init_128 = gb_dijk.init_128
+local del_min = gb_dijk.del_min
+local del_128 = gb_dijk.del_128
+local dijk_enqueue = gb_dijk.enqueue
+local enq_128 = gb_dijk.enq_128
+local requeue = gb_dijk.requeue
+local req_128 = gb_dijk.req_128
 local print_dijkstra_result = gb_dijk.print_dijkstra_result
 
 
-local verbose, alph, freq, heur, echo = false, false, false, false, false
+local g, gg,  uu, vv
+local start, goal, min_dist
 local n, randm, seed = 0, 0, 0
-local g
 local zero_vector = ffi_new("long[9]")
-local gg
-local start, goal
-local uu, vv
-local min_dist
+local verbose, alph, freq, heur, echo = false, false, false, false, false
 
 
 local function printf (...)
@@ -134,13 +202,8 @@ for _, a in ipairs(arg) do
    end
 end
 
-if alph or randm then
-   freq = false
-end
-
-if freq then
-   heur = false
-end
+if alph or randm then freq = false end
+if freq then heur = false end
 
 local g = words(n, randm and zero_vector or nil, 0, seed)
 if g == nil then
@@ -150,12 +213,8 @@ if g == nil then
 end
 
 if verbose then
-   if alph then
-      print("(alphabetic distance selected)")
-   end
-   if freq then
-      print("(frequency-based distances selected)")
-   end
+   if alph then print("(alphabetic distance selected)") end
+   if freq then print("(frequency-based distances selected)") end
    if heur then
       print("(lowerbound heuristic will be used to focus the search)")
    end
@@ -184,10 +243,7 @@ elseif freq then
 end
 
 if alph or freq or heur then
-   gb_dijk.init_queue = gb_dijk.init_128
-   gb_dijk.del_min = gb_dijk.del_128
-   gb_dijk.enqueue = gb_dijk.enq_128
-   gb_dijk.requeue = gb_dijk.req_128
+   init_queue, del_min, enqueue, requeue = init_128, del_128,  enq_128, req_128
 end
 
 while true do
