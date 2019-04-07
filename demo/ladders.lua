@@ -73,11 +73,11 @@ end
 local function plant_new_edge (v)
    local u = gg.vertices + gg.n
    gb_new_edge(u, v, 1)
-   if alph ~= 0 then
+   if alph then
       u.arcs.len = alph_dist(u.name, v.name)
       local a = u.arcs - 1
-      a.len = alph_dist(u.name, v.name)
-   elseif freq ~= 0 then
+      a.len = u.arcs.len
+   elseif freq then
       u.arcs.len = freq_cost(v)
       local a = u.arcs - 1
       a.len = 20
