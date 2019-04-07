@@ -258,7 +258,7 @@ elseif freq then
 end
 
 if alph or freq or heur then
-   init_queue, del_min, enqueue, requeue = init_128, del_128,  enq_128, req_128
+   init_queue, del_min, enqueue, requeue = init_128, del_128, enq_128, req_128
 end
 
 
