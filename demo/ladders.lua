@@ -99,9 +99,9 @@ local req_128 = gb_dijk.req_128
 local print_dijkstra_result = gb_dijk.print_dijkstra_result
 
 
-local g, gg,  uu, vv
+local g, gg, uu, vv
 local start, goal, min_dist
-local n, randm, seed = 0, 0, 0
+local n, randm, seed = 0, false, 0
 local zero_vector = ffi_new("long[9]")
 local verbose, alph, freq, heur, echo = false, false, false, false, false
 
