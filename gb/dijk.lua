@@ -7,7 +7,7 @@ local ffi = require "ffi"
 
 
 ffi.cdef[[
-extern long dijkstra(Vertex*,Vertex*,Graph*,long(*)());
+extern long dijkstra(Vertex*,Vertex*,Graph*,long(*)(Vertex*));
 extern void print_dijkstra_result(Vertex*);
 extern void(*init_queue)();
 extern void(*enqueue)();
