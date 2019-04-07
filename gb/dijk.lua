@@ -29,7 +29,10 @@ local gb = ffi.load "gb"
 
 local _M = {}
 
-
+_M.init_queue = gb.init_queue
+_M.enqueue = gb.enqueue
+_M.requeue = gb.requeue
+_M.del_min = gb.del_min
 _M.init_dlist = gb.init_dlist
 _M.init_128 = gb.init_128
 _M.dijkstra = gb.dijkstra
