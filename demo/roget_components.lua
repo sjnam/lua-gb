@@ -27,12 +27,14 @@ local gb_roget = require "gb.roget"
 local gb_save = require "gb.save"
 local gb = ffi.load "gb"
 local str = ffi.string
+local ipairs = ipairs
 local print = print
 local tonumber = tonumber
 local cat_no = gb_roget.cat_no
 local arcs = gb_graph.arcs
 local vertices = gb_graph.vertices
 local iter_vertices = gb_graph.iter_vertices
+local restore_graph = gb_save.restore_graph
 
 
 local function printf (...)
@@ -93,9 +95,9 @@ local function set_arc_from (v, v1)
 end
 
 
-local function roget_component (n, d, p, s)
-   local g = gb_roget.roget(n, d, p, s)
-   if not g then
+local function roget_component (n, d, p, s, filename)
+   local g = filename and restore_graph(filename) or gb_roget.roget(n, d, p, s)
+   if g == nil then
       printf("Sorry, can't create the graph! (error code %d)\n",
              tonumber(gb.panic_code))
       return
@@ -186,4 +188,25 @@ end
 
 
 -- main
-roget_component(0, 0, 0, 0)
+
+local filename
+local n, d, p, s = 0, 0, 0, 0
+for _, a in ipairs(arg) do
+   local x, v = a:match("-(%a)(%d+)")
+   if x == "n" then
+      n = tonumber(v)
+   elseif x == "d" then
+      d = tonumber(v)
+   elseif x == "p" then
+      p = tonumber(v)
+   elseif x == "s" then
+      s = tonumber(v)
+   elseif x == nil then
+      v = a:match("-g(%a+)")
+      if v then
+         filename = v
+      end
+   end
+end
+
+roget_component(n, d, p, s, filename)
