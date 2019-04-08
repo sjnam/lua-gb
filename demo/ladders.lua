@@ -182,6 +182,7 @@ local function prompt_for_five (sg)
          print("(Please type five lowercase letters and RETURN.)")
       end
    until #iword == 5
+   if echo then print(iword) end
    return word
 end
 
