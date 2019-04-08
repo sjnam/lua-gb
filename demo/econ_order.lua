@@ -17,7 +17,6 @@ it in the ordering, while each customer of that sector would follow it.)
 The general problem of finding a minimizing permutation is NP-complete;
 it includes, as a very special case, the {\sc FEEDBACK ARC SET} problem
 discussed in Karp's classic paper [{\sl Complexity of Computer
-@^Karp, Richard Manning@>
 Computations} (Plenum Press, 1972), 85--103].
 But sophisticated ``branch and cut'' methods have been developed that work
 well in practice on problems of reasonable size.
@@ -78,14 +77,11 @@ local flow = gb_econ.flow
 local gb_init_rand = gb_flip.gb_init_rand
 local gb_unif_rand = gb_flip.gb_unif_rand
 
-local g
 local mat = ffi_new("long[79][79]")
 local del = ffi_new("long[79][79]")
 local best_score = 0x7fffffff
-
 local mapping = ffi_new("long[79]")
-local score, steps
-local best_d, best_k, best_j
+local g
 
 
 local function printf (...)
@@ -137,42 +133,37 @@ end
 printf("Ordering the sectors of %s, using seed %d:\n", str(g.id), t);
 printf(" (%s descent method)\n", greedy and "Steepest" or "Cautious");
 
-do
-   n = tonumber(g.n)
-   for v in vertices(g) do
-      for a in arcs(v) do
-         mat[v-g.vertices][a.tip-g.vertices] = flow(a)
-      end
+n = tonumber(g.n)
+for v in vertices(g) do
+   for a in arcs(v) do
+      mat[v-g.vertices][a.tip-g.vertices] = flow(a)
    end
-   for j=0,n-1 do
-      for k=0,n-1 do
-         del[j][k] = mat[j][k] - mat[k][j]
-      end
+end
+for j=0,n-1 do
+   for k=0,n-1 do
+      del[j][k] = mat[j][k] - mat[k][j]
    end
 end
 
-do
-   local sum = 0
-   for j=1,n-1 do
-      for k=0,j-1 do
-         if mat[j][k] <= mat[k][j] then
-            sum = sum + mat[j][k]
-         else
-            sum = sum + mat[k][j]
-         end
+local sum = 0
+for j=1,n-1 do
+   for k=0,j-1 do
+      if mat[j][k] <= mat[k][j] then
+         sum = sum + mat[j][k]
+      else
+         sum = sum + mat[k][j]
       end
    end
-   printf ("(The amount of feed-forward must be at least %d.)\n", tonumber(sum))
 end
+printf ("(The amount of feed-forward must be at least %d.)\n", tonumber(sum))
 
 gb_init_rand(t)
 
 while r > 0 do
-   r = r - 1
-   steps, score = 0, 0
+   local steps, score = 0, 0
    for k=0,n-1 do
-      j = gb_unif_rand(k+1)
-      mapping[k] = mapping[j]
+      local j = gb_unif_rand(k+1)
+      mapping[k] = tonumber(mapping[j])
       mapping[j] = k
    end
    for j=1,n-1 do
@@ -186,14 +177,14 @@ while r > 0 do
          printf("%s\n", sec_name(k))
       end
    end
-
    while true do
-      best_d = greedy and 0 or 0x7fffffff
-      best_k = -1
+      local best_d = greedy and 0 or 0x7fffffff
+      local best_k = -1
+      local best_j
       for k=0,n-1 do
          local d = 0
          for j=k-1,0,-1 do
-            d = d + del[mapping[k]][mapping[j]]
+            d = d + tonumber(del[mapping[k]][mapping[j]])
             if d > 0 and (greedy and (d > best_d) or (d < best_d)) then
                best_k = k
                best_j = j
@@ -202,7 +193,7 @@ while r > 0 do
          end
          d = 0
          for j=k+1,n-1 do
-            d = d + del[mapping[j]][mapping[k]]
+            d = d + tonumber(del[mapping[j]][mapping[k]])
             if d > 0 and (greedy and (d > best_d) or (d < best_d)) then
                best_k = k
                best_j = j
@@ -256,4 +247,5 @@ while r > 0 do
          end
       end
    end
+   r = r - 1
 end
