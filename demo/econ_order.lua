@@ -66,6 +66,7 @@ local gb_flip = require "gb.flip"
 local gb_econ = require "gb.econ"
 local gb = ffi.load "gb"
 local ffi_new = ffi.new
+local ffi_cast = ffi.cast
 local str = ffi.string
 local io_write = io.write
 local io_flush = io.flush
@@ -166,7 +167,7 @@ while r > 0 do
    for k=0,n-1 do
       local j = tonumber(gb_unif_rand(k+1))
       mapping[k] = mapping[j]
-      mapping[j] = k
+      mapping[j] = ffi_cast("long", k)
    end
    for j=1,n-1 do
       for k=0,j-1 do
@@ -204,7 +205,7 @@ while r > 0 do
       end
       if best_k < 0 then break end
       if gb.verbose ~= 0 then
-         printf("%8d after step %d\n", tonumber(score), tonumber(steps))
+         printf("%8d after step %d\n", tonumber(score), steps)
       elseif steps % 1000 == 0 and steps > 0 then
          io_write(".")
          io_flush()
@@ -214,7 +215,7 @@ while r > 0 do
                 best_j < best_k and "left" or "right")
       end
       j = best_k
-      k = mapping[j]
+      k = tonumber(mapping[j])
       repeat
          if best_j < best_k then
             mapping[j] = mapping[j-1]
@@ -229,8 +230,8 @@ while r > 0 do
                       tonumber(del[k][mapping[j-1]]))
          end
       until j == best_j
-      mapping[j] = k
-      score = score - best_d
+      mapping[j] = ffi_cast("long", k)
+      score = score - ffi_cast("long", best_d)
       steps = steps + 1
    end
    printf("\n%s is %d, found after %d step%s.\n",
