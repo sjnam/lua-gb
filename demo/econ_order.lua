@@ -172,9 +172,9 @@ while r > 0 do
       end
    end
    if gb.verbose > 1 then
-      print("\nInitial permutations:")
+      print("\nInitial permutation:")
       for k=0,n-1 do
-         printf("%s\n", sec_name(k))
+         printf(" %s\n", sec_name(k))
       end
    end
    while true do
