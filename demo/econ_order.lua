@@ -73,13 +73,13 @@ local tonumber = tonumber
 local arcs = gb_graph.arcs
 local vertices = gb_graph.vertices
 local econ = gb_econ.econ
-local flow = gb_econ.flow
 local gb_init_rand = gb_flip.gb_init_rand
 local gb_unif_rand = gb_flip.gb_unif_rand
 
+local INF = 0x7fffffff
 local mat = ffi_new("long[79][79]")
 local del = ffi_new("long[79][79]")
-local best_score = 0x7fffffff
+local best_score = INF
 local mapping = ffi_new("long[79]")
 local g
 
@@ -90,7 +90,7 @@ end
 
 
 local function sec_name (k)
-   local m = g.vertices+mapping[k]
+   local m = g.vertices + mapping[k]
    return str(m.name)
 end
 
@@ -136,7 +136,7 @@ printf(" (%s descent method)\n", greedy and "Steepest" or "Cautious");
 n = tonumber(g.n)
 for v in vertices(g) do
    for a in arcs(v) do
-      mat[v-g.vertices][a.tip-g.vertices] = flow(a)
+      mat[v-g.vertices][a.tip-g.vertices] = a.a.I -- a.flow
    end
 end
 for j=0,n-1 do
@@ -163,7 +163,7 @@ while r > 0 do
    local steps, score = 0, 0
    for k=0,n-1 do
       local j = gb_unif_rand(k+1)
-      mapping[k] = tonumber(mapping[j])
+      mapping[k] = mapping[j]
       mapping[j] = k
    end
    for j=1,n-1 do
@@ -178,7 +178,7 @@ while r > 0 do
       end
    end
    while true do
-      local best_d = greedy and 0 or 0x7fffffff
+      local best_d = greedy and 0 or INF
       local best_k = -1
       local best_j
       for k=0,n-1 do
@@ -235,7 +235,7 @@ while r > 0 do
       steps = steps + 1
    end
    printf ("\n%s is %d, found after %d step%s.\n",
-           best_score == 0x7fffffff and "Local minimum feed-forward" or
+           best_score == INF and "Local minimum feed-forward" or
            "Another local minimum", tonumber(score),
            steps, steps == 1 and "" or "s")   
    if gb.verbose ~= 0 or score < best_score then
