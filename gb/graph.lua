@@ -72,7 +72,7 @@ local gb = ffi.load "gb"
 
 
 local _M = {
-   version = '0.0.1'
+   version = '0.0.2'
 }
 
 
