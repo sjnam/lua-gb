@@ -164,7 +164,7 @@ local steps, score = 0, 0
 local best_d, best_k, best_j = 0, 0, 0
 while r > 0 do
    for k=0,n-1 do
-      local j = gb_unif_rand(k+1)
+      local j = tonumber(gb_unif_rand(k+1))
       mapping[k] = mapping[j]
       mapping[j] = k
    end
