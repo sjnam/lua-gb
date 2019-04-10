@@ -68,6 +68,7 @@ local gb = ffi.load "gb"
 local ffi_new = ffi.new
 local ffi_cast = ffi.cast
 local str = ffi.string
+local NULL = ffi.null
 local io_write = io.write
 local io_flush = io.flush
 local print = print
@@ -127,7 +128,7 @@ for _, a in ipairs(arg) do
 end
 
 g = econ(n, 2, 0, s)
-if not g then
+if g == NULL then
    printf("Sorry, can't create the matrix! (error code %d)\n", gb.panic_code)
    return
 end
@@ -230,8 +231,8 @@ while r > 0 do
                       tonumber(del[k][mapping[j-1]]))
          end
       until j == best_j
-      mapping[j] = ffi_cast("long", k)
-      score = score - ffi_cast("long", best_d)
+      mapping[j] = k
+      score = score - best_d
       steps = steps + 1
    end
    printf("\n%s is %d, found after %d step%s.\n",

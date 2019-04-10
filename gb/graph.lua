@@ -3,7 +3,9 @@
 -- Written by Soojin Nam. Public Domain.
 
 local ffi = require "ffi"
-
+local co_yield = coroutine.yield
+local co_wrap = coroutine.wrap
+local NULL = ffi.null
 
 ffi.cdef[[
 typedef union{
@@ -134,34 +136,35 @@ end
 
 
 function _M.vertices (g)
-   local i = 0
-   local n = tonumber(g.n)
-   return function ()
-      i = i + 1
-      if i <= n then return g.vertices+i-1 end
-   end
+   return co_wrap(function ()
+         local v = g.vertices
+         local n = tonumber(g.n) - 1
+         for i=0,n do
+            co_yield(v+i)
+         end
+   end)
 end
 
 
 function _M.iter_vertices (vertices, fn)
-   local i = 0
-   local v = vertices
-   return function ()
-      i = i + 1
-      v = i > 1 and fn(v) or v
-      if v ~= nil then return v end
-   end
+   return co_wrap(function ()
+         local v = vertices
+         while v ~= NULL do
+            co_yield(v)
+            v = fn(v)
+         end
+   end)
 end
 
 
 function _M.arcs (v)
-   local i = 0
-   local a = v.arcs
-   return function ()
-      i = i + 1
-      a = i > 1 and a.next or a
-      if a ~= nil then return a end
-   end
+   return co_wrap(function ()
+         local a = v.arcs
+         while a ~= NULL do
+            co_yield(a)
+            a = a.next
+         end
+   end)
 end
 
 
