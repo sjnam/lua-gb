@@ -95,7 +95,8 @@ end
 
 
 local function sec_name (k)
-   return str((g.vertices+mapping[k]).name)
+   local v = g.vertices + mapping[k]
+   return str(v['name'])
 end
 
 
@@ -244,7 +245,7 @@ while r > 0 do
       for k=0,n-1 do
          printf(" %s\n", sec_name(k))
          if score < best_score then
-            best_score = score
+            best_score = tonumber(score)
          end
       end
    end
