@@ -130,19 +130,21 @@ end
 
 g = econ(n, 2, 0, s)
 if g == NULL then
-   printf("Sorry, can't create the matrix! (error code %d)\n", gb.panic_code)
+   printf("Sorry, can't create the matrix! (error code %d)\n",
+          tonumber(gb.panic_code))
    return
 end
 printf("Ordering the sectors of %s, using seed %d:\n", str(g.id), t)
 printf(" (%s descent method)\n", greedy and "Steepest" or "Cautious")
 
-n = tonumber(g.n)
 for v in vertices(g) do
    for a in arcs(v) do
       local p = g.vertices
       mat[v-p][a.tip-p] = a.a.I -- a.flow
    end
 end
+
+n = tonumber(g.n)
 for j=0,n-1 do
    for k=0,n-1 do
       del[j][k] = mat[j][k] - mat[k][j]
@@ -206,7 +208,7 @@ while r > 0 do
          end
       end
       if best_k < 0 then break end
-      if gb.verbose ~= 0 then
+      if gb.verbose > 0 then
          printf("%8d after step %d\n", tonumber(score), steps)
       elseif steps % 1000 == 0 and steps > 0 then
          io_write(".")
@@ -232,7 +234,7 @@ while r > 0 do
                       tonumber(del[k][mapping[j-1]]))
          end
       until j == best_j
-      mapping[j] = k
+      mapping[j] = ffi_cast("long", k)
       score = score - best_d
       steps = steps + 1
    end
@@ -240,12 +242,12 @@ while r > 0 do
           best_score == INF and "Local minimum feed-forward" or
           "Another local minimum", tonumber(score),
           steps, steps == 1 and "" or "s")
-   if gb.verbose ~= 0 or score < best_score then
+   if gb.verbose > 0 or score < best_score then
       printf("The corresponding economic order is:\n")
       for k=0,n-1 do
          printf(" %s\n", sec_name(k))
          if score < best_score then
-            best_score = tonumber(score)
+            best_score = score
          end
       end
    end
