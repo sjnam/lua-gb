@@ -2,6 +2,7 @@
 -- Stanford GraphBase ffi binding
 -- Written by Soojin Nam. Public Domain.
 
+
 require "gb.graph"
 local ffi = require "ffi"
 

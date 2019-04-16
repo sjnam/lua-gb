@@ -2,6 +2,7 @@
 -- Stanford GraphBase ffi binding
 -- Written by Soojin Nam. Public Domain.
 
+
 local ffi = require "ffi"
 local str_byte = string.byte
 local str_char = string.char

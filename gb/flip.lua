@@ -2,6 +2,7 @@
 -- Stanford GraphBase ffi binding
 -- Written by Soojin Nam. Public Domain.
 
+
 local ffi = require "ffi"
 
 
@@ -20,13 +21,12 @@ local _M = {}
 
 
 function _M.gb_next_rand()
-   if gb.gb_fptr[0] >= 0 then
-      local r = gb.gb_fptr[0]
+   local r = gb.gb_fptr[0]
+   if r >= 0 then
       gb.gb_fptr = gb.gb_fptr - 1
       return r
-   else
-      gb.gb_flip_cycle()
    end
+   return gb.gb_flip_cycle()
 end
 
 
