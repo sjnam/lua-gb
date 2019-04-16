@@ -16,6 +16,7 @@ To install lua-gb you need to install [libgb](https://www-cs-faculty.stanford.ed
 
 Samples
 =======
+- queen.lua
 ````lua
 local ffi = require "ffi"
 local gb_graph = require "gb.graph"
@@ -38,6 +39,33 @@ for v in gb_graph.vertices(ggg) do
       print("  -> "..str(a.tip.name)..", length "..tonumber(a.len))
    end
 end
+````
+
+- ladders.lua
+````
+$ luajit ladders.lua 
+
+Starting word: words
+    Goal word: graph
+         0 words
+         1 wolds
+         2 golds
+         3 goads
+         4 grads
+         5 grade
+         6 grape
+         7 graph
+
+Starting word: tears
+    Goal word: smile
+         0 tears
+         1 sears
+         2 stars
+         3 stare
+         4 stale
+         5 stile
+         6 smile
+
 ````
 
 Author
