@@ -103,7 +103,7 @@ while true do
 
       printf("The graph has %d vertices, each of degree %d, "
                 .."and it is %sbipartite.\n", n, p+1, bipartite and "" or "not ")
-      
+
       local s, dl, pp, gu = p+2, 1, p, 3
       while s < n do
          s = s + pp
@@ -207,7 +207,7 @@ while true do
                      girth = w.v.I + k
                   end
                end
-               v = v.w.V               
+               v = v.w.V
             end
             printf("%8d vertices at distance %d%s\n", c, k,
                    (c > 0 and "," or "."))
