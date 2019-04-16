@@ -45,26 +45,35 @@ end
 ````
 $ luajit ladders.lua 
 
-Starting word: words
-    Goal word: graph
-         0 words
-         1 wolds
-         2 golds
-         3 goads
-         4 grads
-         5 grade
-         6 grape
-         7 graph
+Starting word: flour
+    Goal word: bread
+         0 flour
+         1 floor
+         2 flood
+         3 blood
+         4 brood
+         5 broad
+         6 bread
 
-Starting word: tears
-    Goal word: smile
-         0 tears
-         1 sears
-         2 stars
-         3 stare
-         4 stale
-         5 stile
-         6 smile
+Starting word: chaos
+    Goal word: order
+         0 chaos
+         1 choos
+         2 chops
+         3 coops
+         4 comps
+         5 comes
+         6 comer
+         7 coder
+         8 cider
+         9 aider
+        10 adder
+        11 odder
+        12 order
+
+Starting word: pound
+    Goal word: marks
+Sorry, there's no ladder from pound to marks.
 
 ````
 
