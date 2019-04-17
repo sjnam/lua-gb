@@ -66,7 +66,6 @@ local gb_flip = require "gb.flip"
 local gb_econ = require "gb.econ"
 local gb = ffi.load "gb"
 local ffi_new = ffi.new
-local ffi_cast = ffi.cast
 local str = ffi.string
 local NULL = ffi.null
 local io_write = io.write
@@ -81,11 +80,15 @@ local econ = gb_econ.econ
 local gb_init_rand = gb_flip.gb_init_rand
 local gb_unif_rand = gb_flip.gb_unif_rand
 
+ffi.cdef[[
+int printf(const char *fmt, ...);
+]]
+
 local INF = 0x7fffffff
-local mat = ffi_new("long[79][79]")
-local del = ffi_new("long[79][79]")
+local mat = ffi_new("int32_t[79][79]")
+local del = ffi_new("int32_t[79][79]")
 local best_score = INF
-local mapping = ffi_new("long[79]")
+local mapping = ffi_new("int32_t[79]")
 local g
 
 
@@ -95,8 +98,7 @@ end
 
 
 local function sec_name (k)
-   local v = g.vertices + mapping[k]
-   return str(v['name'])
+   return str(g.vertices[mapping[k]]['name'])
 end
 
 
@@ -161,7 +163,7 @@ for j=1,n-1 do
       end
    end
 end
-printf("(The amount of feed-forward must be at least %d.)\n", tonumber(sum))
+printf("(The amount of feed-forward must be at least %d.)\n", sum)
 
 gb_init_rand(t)
 
@@ -169,9 +171,9 @@ local steps, score = 0, 0
 local best_d, best_k, best_j = 0, 0, 0
 while r > 0 do
    for k=0,n-1 do
-      local j = tonumber(gb_unif_rand(k+1))
+      local j = gb_unif_rand(k+1)
       mapping[k] = mapping[j]
-      mapping[j] = ffi_cast("long", k)
+      mapping[j] = k
    end
    for j=1,n-1 do
       for k=0,j-1 do
@@ -190,7 +192,7 @@ while r > 0 do
       for k=0,n-1 do
          local d = 0
          for j=k-1,0,-1 do
-            d = d + tonumber(del[mapping[k]][mapping[j]])
+            d = d + del[mapping[k]][mapping[j]]
             if d > 0 and (greedy and d > best_d or d < best_d) then
                best_k = k
                best_j = j
@@ -199,7 +201,7 @@ while r > 0 do
          end
          d = 0
          for j=k+1,n-1 do
-            d = d + tonumber(del[mapping[j]][mapping[k]])
+            d = d + del[mapping[j]][mapping[k]]
             if d > 0 and (greedy and d > best_d or d < best_d) then
                best_k = k
                best_j = j
@@ -209,7 +211,7 @@ while r > 0 do
       end
       if best_k < 0 then break end
       if gb.verbose > 0 then
-         printf("%8d after step %d\n", tonumber(score), steps)
+         printf("%8d after step %d\n", score, steps)
       elseif steps % 1000 == 0 and steps > 0 then
          io_write(".")
          io_flush()
@@ -219,7 +221,7 @@ while r > 0 do
                 best_j < best_k and "left" or "right")
       end
       j = best_k
-      k = tonumber(mapping[j])
+      k = mapping[j]
       repeat
          if best_j < best_k then
             mapping[j] = mapping[j-1]
@@ -230,20 +232,20 @@ while r > 0 do
          end
          if gb.verbose > 1 then
             printf("    %s (%d)\n", sec_name(j),
-                   best_j < best_k and tonumber(del[mapping[j+1]][k]) or
-                      tonumber(del[k][mapping[j-1]]))
+                   best_j < best_k and del[mapping[j+1]][k] or
+                      del[k][mapping[j-1]])
          end
       until j == best_j
-      mapping[j] = ffi_cast("long", k)
+      mapping[j] = k
       score = score - best_d
       steps = steps + 1
    end
    printf("\n%s is %d, found after %d step%s.\n",
           best_score == INF and "Local minimum feed-forward" or
-          "Another local minimum", tonumber(score),
+          "Another local minimum", score,
           steps, steps == 1 and "" or "s")
    if gb.verbose > 0 or score < best_score then
-      printf("The corresponding economic order is:\n")
+      print("The corresponding economic order is:")
       for k=0,n-1 do
          printf(" %s\n", sec_name(k))
          if score < best_score then
