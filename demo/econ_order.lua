@@ -70,19 +70,10 @@ local str = ffi.string
 local NULL = ffi.null
 local io_write = io.write
 local io_flush = io.flush
-local print = print
 local ipairs = ipairs
 local tonumber = tonumber
 local sformat = string.format
-local arcs = gb_graph.arcs
-local vertices = gb_graph.vertices
-local econ = gb_econ.econ
-local gb_init_rand = gb_flip.gb_init_rand
-local gb_unif_rand = gb_flip.gb_unif_rand
 
-ffi.cdef[[
-int printf(const char *fmt, ...);
-]]
 
 local INF = 0x7fffffff
 local mat = ffi_new("int32_t[79][79]")
@@ -94,11 +85,6 @@ local g
 
 local function printf (...)
    io_write(sformat(...))
-end
-
-
-local function sec_name (k)
-   return str(g.vertices[mapping[k]]['name'])
 end
 
 
@@ -130,19 +116,24 @@ for _, a in ipairs(arg) do
    end
 end
 
-g = econ(n, 2, 0, s)
-if g == NULL then
+g = gb_econ.econ(n, 2, 0, s)
+if not g then
    printf("Sorry, can't create the matrix! (error code %d)\n",
           tonumber(gb.panic_code))
    return
 end
+
+local gvertices = g.vertices
+local function sec_name (k)
+   return str(gvertices[mapping[k]]['name'])
+end
+
 printf("Ordering the sectors of %s, using seed %d:\n", str(g.id), t)
 printf(" (%s descent method)\n", greedy and "Steepest" or "Cautious")
 
-for v in vertices(g) do
-   for a in arcs(v) do
-      local p = g.vertices
-      mat[v-p][a.tip-p] = a.a.I -- a.flow
+for v in gb_graph.vertices(g) do
+   for a in gb_graph.arcs(v) do
+      mat[v-gvertices][a.tip-gvertices] = a.a.I -- a.flow
    end
 end
 
@@ -165,13 +156,13 @@ for j=1,n-1 do
 end
 printf("(The amount of feed-forward must be at least %d.)\n", sum)
 
-gb_init_rand(t)
+gb_flip.gb_init_rand(t)
 
 local steps, score = 0, 0
 local best_d, best_k, best_j = 0, 0, 0
 while r > 0 do
    for k=0,n-1 do
-      local j = gb_unif_rand(k+1)
+      local j = gb_flip.gb_unif_rand(k+1)
       mapping[k] = mapping[j]
       mapping[j] = k
    end
@@ -181,7 +172,7 @@ while r > 0 do
       end
    end
    if gb.verbose > 1 then
-      print("\nInitial permutation:")
+      io_write("\nInitial permutation:\n")
       for k=0,n-1 do
          printf(" %s\n", sec_name(k))
       end
@@ -245,7 +236,7 @@ while r > 0 do
           "Another local minimum", score,
           steps, steps == 1 and "" or "s")
    if gb.verbose > 0 or score < best_score then
-      print("The corresponding economic order is:")
+      io_write("The corresponding economic order is:\n")
       for k=0,n-1 do
          printf(" %s\n", sec_name(k))
          if score < best_score then
