@@ -60,23 +60,25 @@
    (greedy or steepest descent instead of cautious descent) are also provided.
 --]]
 
-local ffi = require "ffi"
-local gb_graph = require "gb.graph"
+
 local gb_flip = require "gb.flip"
 local gb_econ = require "gb.econ"
+local gb_graph = require "gb.graph"
+local ffi = require "ffi"
 local gb = ffi.load "gb"
 local ffi_new = ffi.new
 local str = ffi.string
-local NULL = ffi.null
+local ipairs = ipairs
 local io_write = io.write
 local io_flush = io.flush
-local ipairs = ipairs
 local tonumber = tonumber
 local sformat = string.format
 
 
 local INF = 0x7fffffff
 local best_score = INF
+local mat = ffi_new("int32_t[79][79]")
+local del = ffi_new("int32_t[79][79]")
 local mapping = ffi_new("int32_t[79]")
 local g
 
@@ -129,10 +131,9 @@ end
 printf("Ordering the sectors of %s, using seed %d:\n", str(g.id), t)
 printf(" (%s descent method)\n", greedy and "Steepest" or "Cautious")
 
-local mat = ffi_new("int32_t[79][79]")
 for v in gb_graph.vertices(g) do
    for a in gb_graph.arcs(v) do
-      mat[v-gvertices][a.tip-gvertices] = a.a.I -- a.flow
+      mat[v-gvertices][a.tip-gvertices] = a.a.I
    end
 end
 
@@ -144,7 +145,6 @@ for j=0,n-1 do
 end
 
 local sum = 0
-local del = ffi_new("int32_t[79][79]")
 for j=1,n-1 do
    for k=0,j-1 do
       if mat[j][k] <= mat[k][j] then
