@@ -4,7 +4,7 @@ local gb_io = require "gb.io"
 local gb_books = require "gb.books"
 local gb_gates = require "gb.gates"
 local gb_save = require "gb.save"
-local gb = ffi_load "gb"
+local gb = ffi.load "gb"
 local print = print
 local tonumber = tonumber
 local str = ffi.string
@@ -15,7 +15,6 @@ local byte = string.byte
 local io_write = io.write
 local save_graph = gb_save.save_graph
 local restore_graph = gb_save.restore_graph
-local arcs = gb_graph.arcs
 local gb_typed_alloc = gb_graph.gb_typed_alloc
 local gb_save_string = gb_graph.gb_save_string
 
@@ -72,7 +71,7 @@ pr_vert = function (v, l, s)
       pr_util(v.y, s[4], l-1, s)
       pr_util(v.z, s[5], l-1, s)
       if l > 0 then
-         for a in arcs(v) do
+         for a in gb_graph.arcs(v) do
             io_write("\n   ")
             pr_arc(a, 1, s)
          end

@@ -73,8 +73,6 @@ when it is not in the program's dictionary.
 local bit = require "bit"
 local ffi = require "ffi"
 local gb_graph = require "gb.graph"
-local gb_words = require "gb.words"
-local gb_dijk = require "gb.dijk"
 local gb = ffi.load "gb"
 local ffi_new = ffi.new
 local NULL = ffi.null

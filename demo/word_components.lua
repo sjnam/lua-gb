@@ -8,14 +8,10 @@ first $n$ words for all~$n$.
 
 
 local gb_graph = require "gb.graph"
-local gb_words = require "gb.words"
 local ffi = require "ffi"
 local NULL = ffi.null
 local io_write = io.write
 local str = ffi.string
-local words = gb_words.words
-local weight = gb_words.weight
-local vertices = gb_graph.vertices
 local gb = ffi.load "gb"
 
 local function printf (...)
@@ -59,9 +55,9 @@ local g = gb.words(0, NULL, 0, 0)
 local n, isol, comp, m = 0, 0, 0, 0
 
 print("Component analysis of "..str(g.id))
-for v in vertices(g) do
+for v in gb_graph.vertices(g) do
    n = n + 1
-   printf("%4d: %5d %s", n, weight(v), str(v.name))
+   printf("%4d: %5d %s", n, tonumber(v.u.I), str(v.name))
    link(v, v)
    master(v, v)
    size(v, 1)
@@ -128,7 +124,7 @@ for v in vertices(g) do
 end
 
 print("\nThe following non-isolated words didn't join the giant component:")
-for v in vertices(g) do
+for v in gb_graph.vertices(g) do
    if master(v) == v and size(v) > 1 and size(v) + size(v) < g.n then
       io_write(str(v.name))
       local c = 1

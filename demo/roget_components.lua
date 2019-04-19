@@ -23,14 +23,12 @@
 
 local ffi = require "ffi"
 local gb_graph = require "gb.graph"
-local gb_roget = require "gb.roget"
 local gb_save = require "gb.save"
 local gb = ffi.load "gb"
 local str = ffi.string
 local ipairs = ipairs
 local print = print
 local tonumber = tonumber
-local cat_no = gb_roget.cat_no
 local arcs = gb_graph.arcs
 local vertices = gb_graph.vertices
 local iter_vertices = gb_graph.iter_vertices
@@ -43,7 +41,7 @@ end
 
 
 local function specs (v)
-   return cat_no(v), str(v.name)
+   return tonumber(v.u.I), str(v.name)
 end
 
 

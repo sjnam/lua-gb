@@ -61,8 +61,7 @@
 --]]
 
 
-require "gb.flip"
-require "gb.econ"
+local gb_flip = require "gb.flip"
 local gb_graph = require "gb.graph"
 local ffi = require "ffi"
 local gb = ffi.load "gb"
