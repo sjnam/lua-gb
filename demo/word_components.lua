@@ -16,7 +16,7 @@ local str = ffi.string
 local words = gb_words.words
 local weight = gb_words.weight
 local vertices = gb_graph.vertices
-
+local gb = ffi.load "gb"
 
 local function printf (...)
    io_write(string.format(...))
@@ -55,7 +55,7 @@ end
 
 -- main
 
-local g = words(0, NULL, 0, 0)
+local g = gb.words(0, NULL, 0, 0)
 local n, isol, comp, m = 0, 0, 0, 0
 
 print("Component analysis of "..str(g.id))

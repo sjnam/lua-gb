@@ -7,6 +7,7 @@ local co_yield = coroutine.yield
 local co_wrap = coroutine.wrap
 local NULL = ffi.null
 
+-- graph
 ffi.cdef[[
 typedef union{
 struct vertex_struct*V;
@@ -70,25 +71,153 @@ extern Vertex*hash_lookup(char*,Graph*);
 ]]
 
 
+-- basic
+ffi.cdef[[
+extern Graph*board(long,long,long,long,long,long,long);
+extern Graph*simplex(unsigned long,long,long,long,long,long,long);
+extern Graph*subsets(unsigned long,long,long,long,long,long,unsigned long,long);
+extern Graph*perms(long,long,long,long,long,unsigned long,long);
+extern Graph*parts(unsigned long, unsigned long, unsigned long, long);
+extern Graph*binary(unsigned long, unsigned long, long);
+extern Graph*complement(Graph*,long,long,long);
+extern Graph*gunion(Graph*,Graph*,long,long);
+extern Graph*intersection(Graph*,Graph*,long,long);
+extern Graph*lines(Graph*,long);
+extern Graph*product(Graph*,Graph*,long,long);
+extern Graph*induced(Graph*,char*,long,long,long);
+extern Graph*bi_complete(unsigned long,unsigned long,long);
+extern Graph*wheel(unsigned long,unsigned long,long);
+]]
+
+
+-- books
+ffi.cdef[[
+extern Graph*book(char*,unsigned long,unsigned long,unsigned long,unsigned long,long,long,long);
+extern Graph*bi_book(char*,unsigned long,unsigned long,unsigned long,unsigned long,long,long,long);
+extern long chapters;
+extern char*chap_name[];
+]]
+
+
+-- dijk
+ffi.cdef[[
+extern long dijkstra(Vertex*,Vertex*,Graph*,long(*)(Vertex*));
+extern void print_dijkstra_result(Vertex*);
+extern void(*init_queue)();
+extern void(*enqueue)();
+extern void(*requeue)();
+extern Vertex*(*del_min)();
+extern void init_dlist(long);
+extern void enlist(Vertex*,long);
+extern void reenlist(Vertex*,long);
+extern Vertex*del_first();
+extern void init_128();
+extern Vertex*del_128();
+extern void enq_128(Vertex*,long);
+extern void req_128(Vertex*,long);
+]]
+
+
+-- econ
+ffi.cdef[[
+extern Graph*econ(unsigned long,unsigned long,unsigned long,long);
+]]
+
+
+-- games
+ffi.cdef[[
+extern Graph*games(unsigned long,long,long,long,long,long,long,long);
+]]
+
+
+-- gates
+ffi.cdef[[
+extern Graph*risc(unsigned long);
+extern Graph*prod(unsigned long,unsigned long);
+extern void print_gates(Graph*);
+extern long gate_eval(Graph*,char*,char*);
+extern Graph*partial_gates(Graph*,unsigned long,unsigned long,long,char*);
+extern long run_risc(Graph*,unsigned long[],unsigned long,unsigned long);
+extern unsigned long risc_state[];
+]]
+
+
+-- lisa
+ffi.cdef[[
+extern long*lisa(unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,Area);
+extern Graph*plane_lisa(unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long);
+extern Graph*bi_lisa(unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,long);
+extern char lisa_id[];
+]]
+
+
+-- miles
+ffi.cdef[[
+extern Graph*miles(unsigned long,long,long,long,unsigned long,unsigned long,long);
+extern long miles_distance(Vertex*,Vertex*);
+]]
+
+
+-- plain
+ffi.cdef[[
+extern Graph*plane(unsigned long,unsigned long,unsigned long,unsigned long,unsigned long,long);
+extern Graph*plane_miles(unsigned long,long,long,long,unsigned long,unsigned long,long);
+extern void delaunay(Graph*,void(*)());
+]]
+
+
+-- raman
+ffi.cdef[[
+extern Graph*raman(long,long,unsigned long,unsigned long);
+]]
+
+
+-- rand
+ffi.cdef[[
+extern Graph*random_graph(unsigned long,unsigned long,long,long,long,long*,long*,long,long,long);
+extern Graph*random_bigraph(unsigned long,unsigned long,unsigned long,long,long*,long*,long,long,long);
+extern long random_lengths(Graph*,long,long,long,long*,long);
+]]
+
+
+-- roget
+ffi.cdef[[
+extern Graph*roget(unsigned long,unsigned long,unsigned long,long);
+]]
+
+
+-- save
+ffi.cdef[[
+extern long save_graph(Graph*,char*);
+extern Graph*restore_graph(char*);
+]]
+
+
+-- sort
+ffi.cdef[[
+typedef struct node_struct {
+  long key;
+  struct node_struct *link;
+} node;
+extern void gb_linksort(node*);
+extern char*gb_sorted[];
+]]
+
+
+-- words
+ffi.cdef[[
+extern Graph*words(unsigned long,long[],long,long);
+extern Vertex*find_word(char*,void(*)(Vertex*));
+]]
+
+
+
 local gb = ffi.load "gb"
 
 
 local _M = {
    version = '0.0.2'
 }
-
-
-_M.gb_free = gb.gb_free
-_M.gb_alloc = gb.gb_alloc
-_M.gb_new_graph = gb.gb_new_graph
-_M.gb_new_arc = gb.gb_new_arc
-_M.gb_new_edge = gb.gb_new_edge
-_M.gb_virgin_arc = gb.gb_virgin_arc
-_M.gb_new_arc = gb.gb_new_arc
-_M.switch_to_graph = gb.switch_to_graph
-_M.gb_recycle = gb.gb_recycle
-_M.hash_in = gb.hash_in
-_M.hash_setup = gb.hash_setup
 
 
 function _M.gb_typed_alloc (n, t, s)

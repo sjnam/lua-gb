@@ -3,26 +3,9 @@
 -- Written by Soojin Nam. Public Domain.
 
 require "gb.graph"
-local ffi = require "ffi"
 
 
-ffi.cdef[[
-extern Graph*words(unsigned long,long[],long,long);
-extern Vertex*find_word(char*,void(*)(Vertex*));
-]]
-
-
-local gb = ffi.load "gb"
-
-
-local _M = {
-   words = gb.words
-}
-
-
-function _M.find_word (q, f)
-   return gb.find_word(ffi.cast("char*", q), f)
-end
+local _M = {}
 
 
 function _M.weight (v)

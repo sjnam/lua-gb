@@ -2,23 +2,8 @@
 -- Stanford GraphBase ffi binding
 -- Written by Soojin Nam. Public Domain.
 
-require "gb.graph"
-local ffi = require "ffi"
 
-
-ffi.cdef[[
-extern Graph*miles(unsigned long,long,long,long,unsigned long,unsigned long,long);
-extern long miles_distance(Vertex*,Vertex*);
-]]
-
-
-local gb = ffi.load "gb"
-
-
-local _M = {
-   miles = gb.miles,
-   miles_distance = gb.miles_distance
-}
+local _M = {}
 
 function _M.x_coord (v)
    return tonumber(v.x.I)

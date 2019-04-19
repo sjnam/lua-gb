@@ -3,16 +3,7 @@
 -- Written by Soojin Nam. Public Domain.
 
 
-require "gb.graph"
 local ffi = require "ffi"
-
-
-ffi.cdef[[
-extern long save_graph(Graph*,char*);
-extern Graph*restore_graph(char*);
-]]
-
-
 local gb = ffi.load "gb"
 
 

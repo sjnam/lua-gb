@@ -61,8 +61,8 @@
 --]]
 
 
-local gb_flip = require "gb.flip"
-local gb_econ = require "gb.econ"
+require "gb.flip"
+require "gb.econ"
 local gb_graph = require "gb.graph"
 local ffi = require "ffi"
 local gb = ffi.load "gb"
@@ -116,7 +116,7 @@ for _, a in ipairs(arg) do
    end
 end
 
-g = gb_econ.econ(n, 2, 0, s)
+g = gb.econ(n, 2, 0, s)
 if not g then
    printf("Sorry, can't create the matrix! (error code %d)\n",
           tonumber(gb.panic_code))
@@ -156,13 +156,13 @@ for j=1,n-1 do
 end
 printf("(The amount of feed-forward must be at least %d.)\n", sum)
 
-gb_flip.gb_init_rand(t)
+gb.gb_init_rand(t)
 
 local steps, score = 0, 0
 local best_d, best_k, best_j = 0, 0, 0
 while r > 0 do
    for k=0,n-1 do
-      local j = gb_flip.gb_unif_rand(k+1)
+      local j = gb.gb_unif_rand(k+1)
       mapping[k] = mapping[j]
       mapping[j] = k
    end

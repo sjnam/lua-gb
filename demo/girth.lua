@@ -53,9 +53,6 @@ local ffi = require "ffi"
 local gb = ffi.load "gb"
 local gb_graph = require "gb.graph"
 local gb_raman = require "gb.raman"
-local raman = gb_raman.raman
-local arcs = gb_graph.arcs
-local gb_recycle = gb_graph.gb_recycle
 local band, bxor = bit.band, bit.bxor
 local floor = math.floor
 
@@ -81,7 +78,7 @@ while true do
    local q = tonumber(io.read())
    if not q then break end
 
-   local g = raman(p, q, 0, 0)
+   local g = gb.raman(p, q, 0, 0)
    if g == nil then
       local panic_code = gb.panic_code
       printf(" Sorry, I couldn't make that graph (%s).\n",
@@ -195,7 +192,7 @@ while true do
             c = 0
             k = k + 1
             while v ~= sentinel do
-               for a in arcs(v) do
+               for a in gb_graph.arcs(v) do
                   local w = a.tip
                   if w.w.V == nil then
                      w.w.V = u
@@ -216,6 +213,6 @@ while true do
                 k-1, tonumber(girth))
       end
 
-      gb_recycle(g)
+      gb.gb_recycle(g)
    end
 end

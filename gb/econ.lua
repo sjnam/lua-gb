@@ -2,21 +2,8 @@
 -- Stanford GraphBase ffi binding
 -- Written by Soojin Nam. Public Domain.
 
-require "gb.graph"
-local ffi = require "ffi"
 
-
-ffi.cdef[[
-extern Graph*econ(unsigned long,unsigned long,unsigned long,long);
-]]
-
-
-local gb = ffi.load "gb"
-
-
-local _M = {
-   econ = gb.econ
-}
+local _M = {}
 
 
 function _M.flow (a)

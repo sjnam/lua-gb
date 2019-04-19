@@ -16,22 +16,20 @@
 
 
 local ffi = require "ffi"
+require "gb.basic"
 local gb_graph = require "gb.graph"
 local gb_save = require "gb.save"
-local gb_basic = require "gb.basic"
 local print = print
 local tonumber = tonumber
 local str = ffi.string
-local board = gb_basic.board
-local gunion = gb_basic.gunion
-local save_graph = gb_save.save_graph
 
+local gb = ffi.load "gb"
 
-local g = board(3, 4, 0, 0, -1, 0, 0)
-local gg = board(3, 4, 0, 0, -2, 0, 0)
-local ggg = gunion(g, gg, 0, 0)
+local g = gb.board(3, 4, 0, 0, -1, 0, 0)
+local gg = gb.board(3, 4, 0, 0, -2, 0, 0)
+local ggg = gb.gunion(g, gg, 0, 0)
 
-save_graph(ggg, "queen.gb")
+gb_save.save_graph(ggg, "queen.gb")
 
 print("Queen Moves on a 3x4 Board\n")
 print("  The graph whose official name is\n"..str(ggg.id))

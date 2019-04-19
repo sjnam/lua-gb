@@ -58,7 +58,6 @@ local book = gb_books.book
 local desc = gb_books.desc
 local in_count = gb_books.in_count
 local out_count = gb_books.out_count
-local imap_chr = gb_io.imap_chr
 
 
 local function printf (...)
@@ -126,8 +125,8 @@ local function vertex_name (v, i)
    if filename ~= nil then
       return str(v.name)
    end
-   code_name[i][0] = imap_chr(short_code(v) / 36)
-   code_name[i][1] = imap_chr(short_code(v) % 36)
+   code_name[i][0] = gb.imap_chr(short_code(v) / 36)
+   code_name[i][1] = gb.imap_chr(short_code(v) % 36)
    return str(code_name[i])
 end
 

@@ -2,23 +2,14 @@
 -- Stanford GraphBase ffi binding
 -- Written by Soojin Nam. Public Domain.
 
-require "gb.graph"
+
 local ffi = require "ffi"
-
-
-ffi.cdef[[
-extern Graph*games(unsigned long,long,long,long,long,long,long,long);
-]]
-
-
-local gb = ffi.load "gb"
 
 
 local _M = {
    HOME = 1,
    NEUTRAL = 2,
-   AWAY = 3,
-   games = gb.games
+   AWAY = 3
 }
 
 

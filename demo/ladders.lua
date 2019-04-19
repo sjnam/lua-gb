@@ -80,23 +80,8 @@ local ffi_new = ffi.new
 local NULL = ffi.null
 local str = ffi.string
 local rshift = bit.rshift
-local words = gb_words.words
-local find_word = gb_words.find_word
 local arcs = gb_graph.arcs
 local vertices = gb_graph.vertices
-local gb_recycle = gb_graph.gb_recycle
-local gb_new_edge = gb_graph.gb_new_edge
-local gb_new_graph = gb_graph.gb_new_graph
-local dijkstra = gb_dijk.dijkstra
-local init_queue = gb_dijk.init_queue
-local init_128 = gb_dijk.init_128
-local del_min = gb_dijk.del_min
-local del_128 = gb_dijk.del_128
-local dijk_enqueue = gb_dijk.enqueue
-local enq_128 = gb_dijk.enq_128
-local requeue = gb_dijk.requeue
-local req_128 = gb_dijk.req_128
-local print_dijkstra_result = gb_dijk.print_dijkstra_result
 
 
 local g, gg, uu, vv
@@ -221,7 +206,7 @@ end
 if alph or randm then freq = false end
 if freq then heur = false end
 
-local g = words(n, randm and zero_vector or NULL, 0, seed)
+local g = gb.words(n, randm and zero_vector or NULL, 0, seed)
 if g == NULL then
    printf("Sorry, I couldn't build a dictionary (trouble code %d)!\n",
           gb.panic_code)
@@ -270,7 +255,7 @@ while true do
    goal = prompt_for_five("    Goal")
    if not goal then break end
 
-   gg = gb_new_graph(0)
+   gg = gb.gb_new_graph(0)
    if gg == NULL then
       printf("Sorry, I couldn't build a dictionary (trouble code %d)!\n",
              gb.panic_code)
@@ -281,7 +266,7 @@ while true do
 
    local a = gg.vertices + gg.n
    a.name = start
-   uu = find_word(start, plant_new_edge)
+   uu = gb.find_word(start, plant_new_edge)
    if uu == NULL then
       uu = gg.vertices + gg.n
       gg.n = gg.n + 1
@@ -291,7 +276,7 @@ while true do
    else
       local a = gg.vertices + gg.n
       a.name = goal
-      vv = find_word(goal, plant_new_edge)
+      vv = gb.find_word(goal, plant_new_edge)
       if vv == NULL then
          vv = gg.vertices + gg.n
          gg.n = gg.n + 1
@@ -312,18 +297,18 @@ while true do
    end
 
    if not heur then
-      min_dist = dijkstra(uu, vv, gg, NULL)
+      min_dist = gb.dijkstra(uu, vv, gg, NULL)
    elseif alph then
-      min_dist = dijkstra(uu, vv, gg, alph_heur)
+      min_dist = gb.dijkstra(uu, vv, gg, alph_heur)
    else
-      min_dist = dijkstra(uu, vv, gg, hamm_heur)
+      min_dist = gb.dijkstra(uu, vv, gg, hamm_heur)
    end
 
    if min_dist < 0 then
       printf("Sorry, there's no ladder from %s to %s.\n",
             str(start), str(goal))
    else
-      print_dijkstra_result(vv)
+      gb.print_dijkstra_result(vv)
    end
 
    uu = g.vertices + gg.n - 1
@@ -336,5 +321,5 @@ while true do
       uu = uu - 1
    end
 
-   gb_recycle(gg)
+   gb.gb_recycle(gg)
 end

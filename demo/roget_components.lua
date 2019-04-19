@@ -96,7 +96,7 @@ end
 
 
 local function roget_component (n, d, p, s, filename)
-   local g = filename and restore_graph(filename) or gb_roget.roget(n, d, p, s)
+   local g = filename and restore_graph(filename) or gb.roget(n, d, p, s)
    if g == nil then
       printf("Sorry, can't create the graph! (error code %d)\n",
              tonumber(gb.panic_code))
