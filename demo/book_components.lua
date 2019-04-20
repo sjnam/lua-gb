@@ -38,11 +38,9 @@
 --]]
 
 local ffi = require "ffi"
-local gb_graph = require "gb.graph"
-local gb_books = require "gb.books"
-local gb_io = require "gb.io"
-local gb_save = require "gb.save"
-local gb = ffi.load "gb"
+local sgb = require "sgb"
+local gb = sgb.gb
+
 local ffi_new = ffi.new
 local str = ffi.string
 local print = print
@@ -50,14 +48,14 @@ local ipairs = ipairs
 local tonumber = tonumber
 local io_write = io.write
 local sformat = string.format
-local arcs = gb_graph.arcs
-local vertices = gb_graph.vertices
-local short_code = gb_books.short_code
-local restore_graph = gb_save.restore_graph
-local book = gb_books.book
-local desc = gb_books.desc
-local in_count = gb_books.in_count
-local out_count = gb_books.out_count
+local arcs = sgb.arcs
+local vertices = sgb.vertices
+local short_code = sgb.short_code
+local restore_graph = sgb.restore_graph
+local book = sgb.book
+local desc = sgb.desc
+local in_count = sgb.in_count
+local out_count = sgb.out_count
 
 
 local function printf (...)

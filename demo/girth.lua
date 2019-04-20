@@ -50,15 +50,16 @@ then will prompt you for another choice of |p| and |q|.
 
 local bit = require "bit"
 local ffi = require "ffi"
-local gb = ffi.load "gb"
-local gb_graph = require "gb.graph"
-local gb_raman = require "gb.raman"
+local sgb = require "sgb"
+local gb = sgb.gb
 local band, bxor = bit.band, bit.bxor
 local floor = math.floor
+local io_write = io.write
+local sformat = string.format
 
 
 local function printf (...)
-   io.write(string.format(...))
+   io_write(sformat(...))
 end
 
 
@@ -71,10 +72,10 @@ print("Both p and q should be odd prime numbers;")
 print("  or you can try p = 2 with q = 17 or 43.")
 
 while true do
-   io.write("\nChoose a branching factor, p: ")
+   io_write("\nChoose a branching factor, p: ")
    local p = tonumber(io.read())
    if not p then break end
-   io.write("OK, now choose the cube root of graph size, q: ");
+   io_write("OK, now choose the cube root of graph size, q: ");
    local q = tonumber(io.read())
    if not q then break end
 
@@ -192,7 +193,7 @@ while true do
             c = 0
             k = k + 1
             while v ~= sentinel do
-               for a in gb_graph.arcs(v) do
+               for a in sgb.arcs(v) do
                   local w = a.tip
                   if w.w.V == nil then
                      w.w.V = u

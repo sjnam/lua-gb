@@ -1,10 +1,10 @@
 local ffi = require "ffi"
-local gb_io = require "gb.io"
+local sgb = require "sgb"
 local error = error
 
-local gb = ffi.load "gb"
+local gb = sgb.gb
 
-if not gb_io.gb_open("test.dat") then
+if not sgb.gb_open("test.dat") then
     error("Can't open test.dat")
 end
 
@@ -23,17 +23,17 @@ if gb.gb_number(16) ~= 0x9ABCDEF then
     error("fail to gb_number")
 end
 
-if gb_io.gb_char() ~= '\n' then
+if sgb.gb_char() ~= '\n' then
     error("fail to gb_char")
 end
 
 gb.gb_newline()
 
-if gb_io.gb_char() ~= '\n' then
+if sgb.gb_char() ~= '\n' then
     error("fail to gb_char")
 end
 
-if gb_io.gb_char() ~= '\n' then
+if sgb.gb_char() ~= '\n' then
     error("fail to gb_char")
 end
 
@@ -42,9 +42,9 @@ if gb.gb_number(60) ~= 0 then
 end
 
 local temp = ffi.new("char[?]", 100)
-gb_io.gb_string(temp, '\n')
+sgb.gb_string(temp, '\n')
 gb.gb_newline()
-gb_io.gb_string(temp, ':')
+sgb.gb_string(temp, ':')
 
 if ffi.string(temp) ~= "Oops" then
     error("fail to gb_string")
@@ -54,21 +54,21 @@ if gb.gb_digit(10) ~= -1 then
     error("Digit error not detected")
 end
 
-if gb_io.gb_char() ~= ':' then
+if sgb.gb_char() ~= ':' then
     error("fail to gb_char")
 end
 
-if gb_io.gb_eof() then
+if sgb.gb_eof() then
     error("premature eof")
 end
 
 gb.gb_newline()
 
-if not gb_io.gb_eof() then
+if not sgb.gb_eof() then
     error("fail to gb_eof")
 end
 
-if not gb_io.gb_close() then
+if not sgb.gb_close() then
     error("fail to gb_close")
 end
 

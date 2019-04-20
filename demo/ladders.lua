@@ -72,14 +72,14 @@ when it is not in the program's dictionary.
 
 local bit = require "bit"
 local ffi = require "ffi"
-local gb_graph = require "gb.graph"
-local gb = ffi.load "gb"
+local sgb = require "sgb"
+local gb = sgb.gb
 local ffi_new = ffi.new
 local NULL = ffi.null
 local str = ffi.string
 local rshift = bit.rshift
-local arcs = gb_graph.arcs
-local vertices = gb_graph.vertices
+local arcs = sgb.arcs
+local vertices = sgb.vertices
 
 
 local g, gg, uu, vv

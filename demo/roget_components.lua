@@ -22,17 +22,16 @@
 
 
 local ffi = require "ffi"
-local gb_graph = require "gb.graph"
-local gb_save = require "gb.save"
+local sgb = require "sgb"
 local gb = ffi.load "gb"
 local str = ffi.string
 local ipairs = ipairs
 local print = print
 local tonumber = tonumber
-local arcs = gb_graph.arcs
-local vertices = gb_graph.vertices
-local iter_vertices = gb_graph.iter_vertices
-local restore_graph = gb_save.restore_graph
+local arcs = sgb.arcs
+local vertices = sgb.vertices
+local iter_vertices = sgb.iter_vertices
+local restore_graph = sgb.restore_graph
 
 
 local function printf (...)

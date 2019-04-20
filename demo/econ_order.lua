@@ -61,10 +61,9 @@
 --]]
 
 
-local gb_flip = require "gb.flip"
-local gb_graph = require "gb.graph"
 local ffi = require "ffi"
-local gb = ffi.load "gb"
+local sgb = require "sgb"
+local gb = sgb.gb
 local ffi_new = ffi.new
 local str = ffi.string
 local ipairs = ipairs
@@ -130,8 +129,8 @@ end
 printf("Ordering the sectors of %s, using seed %d:\n", str(g.id), t)
 printf(" (%s descent method)\n", greedy and "Steepest" or "Cautious")
 
-for v in gb_graph.vertices(g) do
-   for a in gb_graph.arcs(v) do
+for v in sgb.vertices(g) do
+   for a in sgb.arcs(v) do
       mat[v-gvertices][a.tip-gvertices] = a.a.I
    end
 end
