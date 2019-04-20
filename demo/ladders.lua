@@ -80,18 +80,13 @@ local str = ffi.string
 local rshift = bit.rshift
 local arcs = sgb.arcs
 local vertices = sgb.vertices
-
+local printf = sgb.printf
 
 local g, gg, uu, vv
 local start, goal, min_dist
 local n, seed = 0, 0
 local zero_vector = ffi_new("long[9]")
 local alph, freq, heur, echo, randm = false, false, false, false, false
-
-
-local function printf (...)
-   io.write(string.format(...))
-end
 
 
 local function a_dist (p, q, k)

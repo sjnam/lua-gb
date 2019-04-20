@@ -56,11 +56,7 @@ local book = sgb.book
 local desc = sgb.desc
 local in_count = sgb.in_count
 local out_count = sgb.out_count
-
-
-local function printf (...)
-   io_write(sformat(...))
-end
+local printf = sgb.printf
 
 
 local function rank (v)

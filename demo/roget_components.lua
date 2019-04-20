@@ -32,11 +32,7 @@ local arcs = sgb.arcs
 local vertices = sgb.vertices
 local iter_vertices = sgb.iter_vertices
 local restore_graph = sgb.restore_graph
-
-
-local function printf (...)
-   io.write(string.format(...))
-end
+local printf = sgb.printf
 
 
 local function specs (v)

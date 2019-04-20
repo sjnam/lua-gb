@@ -55,12 +55,7 @@ local gb = sgb.gb
 local band, bxor = bit.band, bit.bxor
 local floor = math.floor
 local io_write = io.write
-local sformat = string.format
-
-
-local function printf (...)
-   io_write(sformat(...))
-end
+local printf = sgb.printf
 
 
 -- main

@@ -2,6 +2,7 @@
 -- Stanford GraphBase ffi binding
 -- Written by Soojin Nam. Public Domain.
 
+
 local ffi = require "ffi"
 require "sgb_hdr"
 local gb = ffi.load "gb"
@@ -11,11 +12,17 @@ local str_char = string.char
 local co_yield = coroutine.yield
 local co_wrap = coroutine.wrap
 local NULL = ffi.null
+local ffi_cast = ffi.cast
+local str = ffi.string
+local ffi_sizeof = ffi.sizeof
+local tonumber = tonumber
+local io_write = io.write
+local sformat = string.format
 
 
 local _M = {
    gb = gb,
-   version = '0.0.2'
+   version = '0.0.3'
 }
 
 
@@ -32,7 +39,7 @@ end
 
 -- gb_graph.w
 function _M.gb_typed_alloc (n, t, s)
-   return gb.gb_alloc(n * ffi.sizeof(t), s)
+   return gb.gb_alloc(n * ffi_sizeof(t), s)
 end
 
 function _M.n_1 (g)
@@ -41,30 +48,30 @@ end
 
 function _M.mark_bipartite (g, n1)
    g.uu.I = n1
-   g.util_types[8] = string.byte('I')
+   g.util_types[8] = str_byte('I')
 end
 
 function _M.make_compound_id (g, s1, gg, s2)
-   gb.make_compound_id(g._g, ffi.cast("char*", s1),
-                       gg._g, ffi.cast("char*", s2))
+   gb.make_compound_id(g._g, ffi_cast("char*", s1),
+                       gg._g, ffi_cast("char*", s2))
 end
 
 function _M.make_double_compound_id (g, s1, g, s2, ggg, s3)
-   gb.make_double_compound_id(g._g, ffi.cast("char*", s1),
-                              gg._g, ffi.cast("char*", s2),
-                              ggg._g, ffi.cast("char*", s3))
+   gb.make_double_compound_id(g._g, ffi_cast("char*", s1),
+                              gg._g, ffi_cast("char*", s2),
+                              ggg._g, ffi_cast("char*", s3))
 end
 
 function _M.gb_save_string (s)
-   return gb.gb_save_string(ffi.cast("char*", s))
+   return gb.gb_save_string(ffi_cast("char*", s))
 end
 
 function _M.hash_out (s)
-   return gb.hash_out(ffi.cast("char*", s))
+   return gb.hash_out(ffi_cast("char*", s))
 end
 
 function _M.hash_lookup (s, g)
-   return gb.hash_lookup(ffi.cast("char*", s), g)
+   return gb.hash_lookup(ffi_cast("char*", s), g)
 end
 
 function _M.vertices (g)
@@ -104,7 +111,7 @@ function _M.gb_char ()
 end
 
 function _M.new_checksum (s, old_checksum)
-   return gb.new_checksum(ffi.cast("char*", s), old_checksum)
+   return gb.new_checksum(ffi_cast("char*", s), old_checksum)
 end
 
 function _M.gb_string (p, c)
@@ -112,11 +119,11 @@ function _M.gb_string (p, c)
 end
 
 function _M.gb_raw_open (f)
-   gb.gb_raw_open(ffi.cast("char*", f))
+   gb.gb_raw_open(ffi_cast("char*", f))
 end
 
 function _M.gb_open (f)
-   return gb.gb_open(ffi.cast("char*", f)) == 0
+   return gb.gb_open(ffi_cast("char*", f)) == 0
 end
 
 function _M.gb_close ()
@@ -130,7 +137,7 @@ end
 
 -- gb_basic.w
 function _M.induced (g, f, ...)
-   return gb.induced(g, ffi.cast("char*", f), ...)
+   return gb.induced(g, ffi_cast("char*", f), ...)
 end
 
 function _M.complete (n)
@@ -184,15 +191,15 @@ end
 
 -- gb_books.w
 function _M.book (title, ...)
-   return gb.book(ffi.cast("char*", title), ...)
+   return gb.book(ffi_cast("char*", title), ...)
 end
 
 function _M.bi_book (title, ...)
-   return gb.bi_book(ffi.cast("char*", title), ...)
+   return gb.bi_book(ffi_cast("char*", title), ...)
 end
 
 function _M.desc (v)
-   return ffi.string(v.z.S)
+   return str(v.z.S)
 end
 
 function _M.in_count (v)
@@ -222,15 +229,15 @@ function _M.upi (v)
 end
 
 function _M.abbr (v)
-   return ffi.string(v.x.S)
+   return str(v.x.S)
 end
 
 function _M.nickname (v)
-   return ffi.string(v.y.S)
+   return str(v.y.S)
 end
 
 function _M.conference (v)
-   return ffi.string(v.z.S)
+   return str(v.z.S)
 end
 
 function _M.venue (a)
@@ -244,11 +251,11 @@ end
 
 -- gb_gates.w
 function _M.gate_eval (g, in_vec, out_vec)
-   return gb.gate_eval(g, ffi.cast("char*", in_vec), ffi.cast("char*", out_vec))
+   return gb.gate_eval(g, ffi_cast("char*", in_vec), ffi_cast("char*", out_vec))
 end
 
 function _M.partial_gates (g, r, prob, seed, buf)
-   return gb.partial_gates(g, r, prob, seed, ffi.cast("char*", buf))
+   return gb.partial_gates(g, r, prob, seed, ffi_cast("char*", buf))
 end
 
 function _M.val (v)
@@ -268,7 +275,7 @@ function _M.outs (g)
 end
 
 function _M.is_boolean (v)
-   local v = ffi.cast("unsigned long", v)
+   local v = ffi_cast("unsigned long", v)
    return v <= 1
 end
 
@@ -290,11 +297,17 @@ end
 
 -- gb_save.w
 function _M.save_graph (g, f)
-   return gb.save_graph(g, ffi.cast("char*", f))
+   return gb.save_graph(g, ffi_cast("char*", f))
 end
 
 function _M.restore_graph (f)
-   return gb.restore_graph(ffi.cast("char*", f))
+   return gb.restore_graph(ffi_cast("char*", f))
+end
+
+
+-- common
+function _M.printf (...)
+   io_write(sformat(...))
 end
 
 

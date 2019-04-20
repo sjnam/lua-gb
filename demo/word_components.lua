@@ -7,16 +7,13 @@ first $n$ words for all~$n$.
 --]]
 
 
-local sgb = require "sgb"
 local ffi = require "ffi"
+local sgb = require "sgb"
 local NULL = ffi.null
 local io_write = io.write
 local str = ffi.string
 local gb = ffi.load "gb"
-
-local function printf (...)
-   io_write(string.format(...))
-end
+local printf = sgb.printf
 
 
 local function link (vx, v)

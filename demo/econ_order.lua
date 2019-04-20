@@ -71,7 +71,7 @@ local io_write = io.write
 local io_flush = io.flush
 local tonumber = tonumber
 local sformat = string.format
-
+local printf = sgb.printf
 
 local INF = 0x7fffffff
 local best_score = INF
@@ -79,11 +79,6 @@ local mat = ffi_new("int32_t[79][79]")
 local del = ffi_new("int32_t[79][79]")
 local mapping = ffi_new("int32_t[79]")
 local g
-
-
-local function printf (...)
-   io_write(sformat(...))
-end
 
 
 -- main
