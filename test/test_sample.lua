@@ -43,7 +43,7 @@ local function print_sample (g, n)
          io_write("index is out of range!\n")
       else
          pr_vert(g.vertices+n, 1, g.util_types)
-         io_write()
+         io_write("\n")
       end
       gb.gb_recycle(g)
    end
