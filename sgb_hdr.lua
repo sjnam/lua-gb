@@ -67,6 +67,7 @@ extern long extra_n;
 extern char null_string[];
 extern void make_compound_id(Graph*,char*,Graph*,char*);
 extern void make_double_compound_id(Graph*,char*,Graph*,char*,Graph*,char*);
+extern unsigned long edge_trick;
 extern Graph*gb_new_graph(long);
 extern void gb_new_arc(Vertex*,Vertex*,long);
 extern Arc*gb_virgin_arc();
