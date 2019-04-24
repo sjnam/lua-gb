@@ -52,14 +52,14 @@ function _M.mark_bipartite (g, n1)
 end
 
 function _M.make_compound_id (g, s1, gg, s2)
-   gb.make_compound_id(g._g, ffi_cast("char*", s1),
-                       gg._g, ffi_cast("char*", s2))
+   gb.make_compound_id(g, ffi_cast("char*", s1),
+                       gg, ffi_cast("char*", s2))
 end
 
 function _M.make_double_compound_id (g, s1, g, s2, ggg, s3)
-   gb.make_double_compound_id(g._g, ffi_cast("char*", s1),
-                              gg._g, ffi_cast("char*", s2),
-                              ggg._g, ffi_cast("char*", s3))
+   gb.make_double_compound_id(g, ffi_cast("char*", s1),
+                              gg, ffi_cast("char*", s2),
+                              ggg, ffi_cast("char*", s3))
 end
 
 function _M.gb_save_string (s)
