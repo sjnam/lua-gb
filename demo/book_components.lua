@@ -78,8 +78,8 @@ end
 local function untagged (v)
    return v.x.A
 end
-local function set_untagged (v, v1)
-   v.x.A = v1
+local function set_untagged (v, a)
+   v.x.A = a
 end
 
 
@@ -161,7 +161,8 @@ for _, a in ipairs(arg) do
          else
             filename = a:match("-g(%a+)")
             if not filename then
-               printf("Usage: %s [-ttitle][-nN][-xN][-fN][-lN][-iN][-oN][-sN][-v][-gfoo]\n",
+               printf("Usage: %s [-ttitle][-nN][-xN][-fN][-lN][-iN]"
+                         .."[-oN][-sN][-v][-gfoo]\n",
                       arg[0])
                return
             end
@@ -239,7 +240,8 @@ for vv in vertices(g) do
             if min(v) == u then
                if u == dummy then
                   if artic_pt ~= nil then
-                     printf(" and %s (this ends a connected component of the graph)\n",
+                     printf(" and %s (this ends a connected component"
+                               .." of the graph)\n",
                             vertex_name(artic_pt, 0))
                   else
                      printf("Isolated vertex %s\n", vertex_name(v, 0))
@@ -248,7 +250,8 @@ for vv in vertices(g) do
                   artic_pt = nil
                else
                   if artic_pt ~= nil then
-                     printf(" and articulation point %s\n", vertex_name(artic_pt, 0))
+                     printf(" and articulation point %s\n",
+                            vertex_name(artic_pt, 0))
                   end
                   t = active_stack
                   active_stack = link(v)

@@ -59,8 +59,8 @@ end
 local function untagged (v)
    return v.x.A
 end
-local function set_untagged (v, v1)
-   v.x.A = v1
+local function set_untagged (v, a)
+   v.x.A = a
 end
 
 

@@ -16,25 +16,25 @@
 
 
 local ffi = require "ffi"
+local C = ffi.C
 local sgb = require "sgb"
 local gb = sgb.gb
-local print = print
-local tonumber = tonumber
 local str = ffi.string
-
+local tonumber = tonumber
+local printf = sgb.printf
 
 local g = gb.board(3, 4, 0, 0, -1, 0, 0)
 local gg = gb.board(3, 4, 0, 0, -2, 0, 0)
 local ggg = gb.gunion(g, gg, 0, 0)
 sgb.save_graph(ggg, "queen.gb")
 
-print("Queen Moves on a 3x4 Board\n")
-print("  The graph whose official name is\n"..str(ggg.id))
-print("  has "..tonumber(ggg.n).." vertices and "..tonumber(ggg.m).." arcs:\n")
+printf("Queen Moves on a 3x4 Board\n")
+printf("  The graph whose official name is\n%s\n", str(ggg.id))
+printf("  has %d vertices and %d arcs:\n\n", tonumber(ggg.n), tonumber(ggg.m))
 
 for v in sgb.vertices(ggg) do
-   print(str(v.name))
+   printf("%s\n", str(v.name))
    for a in sgb.arcs(v) do
-      print("  -> "..str(a.tip.name)..", length "..tonumber(a.len))
+      printf("  -> %s, length %d\n", str(a.tip.name), tonumber(a.len))
    end
 end
