@@ -53,7 +53,6 @@ local ffi = require "ffi"
 local sgb = require "sgb"
 local gb = sgb.gb
 local band, bxor = bit.band, bit.bxor
-local floor = math.floor
 local io_write = io.write
 local printf = sgb.printf
 
@@ -121,7 +120,7 @@ while true do
          end
 
          do
-            local qq = floor(pp/nn)
+            local qq = pp/nn
             if qq * qq > p then
                du = du - 1
             elseif (qq+1) * (qq+1) > p then
@@ -130,11 +129,11 @@ while true do
                local parity = 0
                pp = pp - qq*nn
                while true do
-                  local x = floor((aa+qq) / bb)
+                  local x = (aa+qq) / bb
                   local y = nn - x*pp
                   if y <= 0 then break end
                   aa = bb*x - aa
-                  bb = floor((p - aa*aa) / bb)
+                  bb = (p - aa*aa) / bb
                   nn = pp
                   pp = y
                   parity = bxor(parity, 1)
